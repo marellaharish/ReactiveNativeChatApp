@@ -272,10 +272,12 @@ const ChatMessagesScreen = () => {
                         alignSelf: "flex-start",
                         backgroundColor: "white",
                         padding: 4,
-                        margin: 10,
-                        borderRadius: 7,
                         maxWidth: "60%",
-                        minHeight: 100
+                        minWidth: 80,
+                        borderRadius: 7,
+                        margin: 5,
+                        paddingLeft: 10,
+                        paddingTop: 10
                       },
 
                     isSelected && { width: "100%", backgroundColor: "#F0FFFF" },
