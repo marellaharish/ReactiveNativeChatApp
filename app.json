@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "messenger-project",
-    "slug": "messenger-project",
+    "slug": "chat-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,10 +29,20 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.harishmarella.chatapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0145e50d-7c70-44a1-9fe1-68ea16653780"
+      }
+    },
+    "owner": "harishmarella"
   }
 }
