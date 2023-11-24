@@ -60,7 +60,7 @@ const HomeScreen = () => {
       setUserId(userId);
 
       axios
-        .get(`http://192.168.2.185:8000/users/${userId}`)
+        .get(`https://reactnativechatapp.onrender.com/users/${userId}`)
         .then((response) => {
           setUsers(response.data);
         })
