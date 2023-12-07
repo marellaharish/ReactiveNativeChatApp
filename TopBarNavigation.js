@@ -12,14 +12,17 @@ const TopBarNavigation = () => {
     const inset = useSafeAreaInsets();
     return (
         <Tab.Navigator screenOptions={{
-            tabBarLabelStyle: { fontSize: 12 },
-            tabBarLabelStyle: { textTransform: 'capitalize' },
-            tabBarStyle: { backgroundColor: 'powderblue' },
+            tabBarLabelStyle: { fontSize: 13, textTransform: 'capitalize', color: "#fff" },
+            tabBarStyle: { backgroundColor: '#6DB3EC' },
+            tabBarIndicatorStyle: {
+                borderBottomColor: '#fff',
+                borderBottomWidth: 3,
+            },
         }} >
-            <Tab.Screen name="Chats Screen" component={ChatsScreen} options={{ headerShadowVisible: false }} />
+            <Tab.Screen name="Chats" component={ChatsScreen} options={{ headerShadowVisible: false }} />
             <Tab.Screen name="Home" component={HomeScreen} options={{ headerShadowVisible: false }} />
             <Tab.Screen name="Requests" component={FriendsScreen} options={{ headerShadowVisible: false }} />
-        </Tab.Navigator>
+        </Tab.Navigator >
     )
 }
 export default TopBarNavigation

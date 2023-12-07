@@ -55,30 +55,30 @@ const UserChat = ({ item }) => {
         flexDirection: "row",
         alignItems: "center",
         gap: 10,
-        borderWidth: 0.7,
+        borderWidth: 0,
         borderColor: "#D0D0D0",
         borderTopWidth: 0,
         borderLeftWidth: 0,
         borderRightWidth: 0,
-        padding: 10,
+        padding: 8,
       }}
     >
       <Image
-        style={{ width: 50, height: 50, borderRadius: 25, resizeMode: "cover" }}
+        style={{ width: 45, height: 45, borderRadius: 25, resizeMode: "cover" }}
         source={{ uri: item?.image }}
       />
 
       <View style={{ flex: 1 }}>
         <Text style={{ fontSize: 15, fontWeight: "500" }}>{item?.name}</Text>
         {lastMessage && (
-          <Text style={{ marginTop: 3, color: "gray", fontWeight: "500" }}>
+          <Text style={{ marginTop: 2, color: "gray", fontWeight: "500" }}>
             {lastMessage?.message}
           </Text>
         )}
       </View>
 
       <View>
-        <Text style={{ fontSize: 11, fontWeight: "400", color: "#585858" }}>
+        <Text style={{ fontSize: 11, fontWeight: "400", color: "#585858", marginEnd: 15 }}>
           {lastMessage && formatTime(lastMessage?.timeStamp)}
         </Text>
       </View>

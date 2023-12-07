@@ -12,16 +12,12 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const { userId, setUserId } = useContext(UserType);
   const [users, setUsers] = useState([]);
+
   const handleLogout = async () => {
     try {
-      // Clear the authentication token from AsyncStorage
       await AsyncStorage.removeItem("authToken");
-
-      // Clear the user id in the context
       setUserId(null);
-
-      // Navigate to the login or authentication screen
-      navigation.navigate("Login"); // replace "Login" with your actual authentication screen name
+      navigation.navigate("Login");
     } catch (error) {
       console.log("Error logging out:", error);
     }
@@ -74,7 +70,7 @@ const HomeScreen = () => {
 
   console.log("users", users);
   return (
-    <View>
+    <View style={{ backgroundColor: "#fff", minHeight: 100 }}>
       <View style={{ padding: 10 }}>
         {users.map((item, index) => (
           <User key={index} item={item} />
