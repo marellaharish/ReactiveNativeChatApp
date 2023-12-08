@@ -135,18 +135,21 @@ const ChatMessagesScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "",
+      headerStyle: {
+        backgroundColor: '#6DB3EC',
+      },
       headerLeft: () => (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
           <Ionicons
             onPress={() => navigation.goBack()}
             name="arrow-back"
             size={24}
-            color="black"
+            color="white"
           />
 
           {selectedMessages.length > 0 ? (
             <View>
-              <Text style={{ fontSize: 16, fontWeight: "500" }}>
+              <Text style={{ fontSize: 16, fontWeight: "500", color: "#fff" }}>
                 {selectedMessages.length}
               </Text>
             </View>
@@ -162,7 +165,7 @@ const ChatMessagesScreen = () => {
                 source={{ uri: recepientData?.image }}
               />
 
-              <Text style={{ marginLeft: 5, fontSize: 15, fontWeight: "bold" }}>
+              <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: "500", color: "#fff" }}>
                 {recepientData?.name}
               </Text>
             </View>
@@ -171,18 +174,22 @@ const ChatMessagesScreen = () => {
       ),
       headerRight: () =>
         selectedMessages.length > 0 ? (
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-            <Ionicons name="md-arrow-redo-sharp" size={24} color="black" />
-            <Ionicons name="md-arrow-undo" size={24} color="black" />
-            <FontAwesome name="star" size={24} color="black" />
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
+            <Ionicons name="md-arrow-redo-sharp" size={20} color="white" />
+            <Ionicons name="md-arrow-undo" size={20} color="white" />
+            <FontAwesome name="star" size={20} color="white" />
             <MaterialIcons
               onPress={() => deleteMessages(selectedMessages)}
               name="delete"
-              size={24}
-              color="black"
+              size={20}
+              color="white"
             />
           </View>
-        ) : null,
+        ) : (<View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
+          <FontAwesome name="video-camera" size={18} color="#fff" />
+          <Ionicons name="call" size={18} color="#fff" />
+          <Entypo name="dots-three-vertical" size={18} color="#fff" />
+        </View>),
     });
   }, [recepientData, selectedMessages]);
 
@@ -280,7 +287,7 @@ const ChatMessagesScreen = () => {
                         paddingTop: 10
                       },
 
-                    isSelected && { width: "100%", backgroundColor: "#F0FFFF" },
+                    isSelected && { Width: "%", backgroundColor: "#F0FFFF" },
                   ]}
                 >
                   <Text
@@ -358,65 +365,76 @@ const ChatMessagesScreen = () => {
             }
           })}
         </ScrollView>
-
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-            borderTopWidth: 1,
-            borderTopColor: "#dddddd",
-            backgroundColor: "#ffffff",
-            paddingBottom: showEmojiSelector ? 0 : 15,
-          }}
-        >
-          <Entypo
-            onPress={handleEmojiPress}
-            style={{ marginRight: 5 }}
-            name="emoji-happy"
-            size={24}
-            color="gray"
-          />
-
-          <TextInput
-            value={message}
-            onChangeText={(text) => setMessage(text)}
-            style={{
-              flex: 1,
-              height: 40,
-              borderWidth: 1,
-              borderColor: "#dddddd",
-              borderRadius: 20,
-              paddingHorizontal: 10,
-            }}
-            placeholder="Type Your message..."
-          />
-
+        <View style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", margin: 10 }}>
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              gap: 7,
-              marginHorizontal: 8,
+              paddingHorizontal: 5,
+              borderTopColor: "#dddddd",
+              backgroundColor: "#ffffff",
+              borderRadius: 20,
+              minHeight: 50,
+              maxHeight: 100,
+              width: "89%",
+              position: "relative",
+              marginRight: 5,
+              paddingBottom: showEmojiSelector ? 0 : 15,
             }}
           >
-            <Entypo onPress={pickImage} name="camera" size={24} color="gray" />
+            <View style={{
+              position: "absolute",
+              width: "98%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexDirection: "row",
+              minHeight: 50,
+              maxHeight: 100,
+            }}>
+              <Entypo
+                onPress={handleEmojiPress}
+                style={{ marginRight: 1, paddingHorizontal: 10 }}
+                name="emoji-happy"
+                size={20}
+                color="gray"
+              />
+              <TextInput
+                value={message}
+                onChangeText={(text) => setMessage(text)}
+                style={{
+                  flex: 1,
+                  // borderColor: "#dbdbdb",
+                  // borderWidth: 1,
+                  height: "100%",
+                  overflow: "hidden",
+                }}
+                placeholder="Message"
+              />
 
-            <Feather name="mic" size={24} color="gray" />
+              <View>
+                <Entypo onPress={pickImage} name="camera" size={24} color="gray" />
+
+                {/* <Feather name="mic" size={24} color="gray" /> */}
+              </View>
+            </View>
           </View>
 
           <Pressable
             onPress={() => handleSend("text")}
             style={{
-              backgroundColor: "#007bff",
-              paddingVertical: 8,
-              paddingHorizontal: 12,
-              borderRadius: 20,
+              backgroundColor: "#6DB3EC",
+              borderRadius: 50,
+              width: 45,
+              height: 45,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <Text style={{ color: "white", fontWeight: "bold" }}>Send</Text>
+            <Ionicons name="send" size={20} color="#fff" />
           </Pressable>
+
         </View>
 
         {showEmojiSelector && (

@@ -90,7 +90,7 @@ const User = ({ item }) => {
         <Pressable
           style={{
             backgroundColor: "#82CD47",
-            padding: 10,
+            padding: 8,
             width: 105,
             borderRadius: 6,
           }}
@@ -101,7 +101,7 @@ const User = ({ item }) => {
         <Pressable
           style={{
             backgroundColor: "gray",
-            padding: 10,
+            padding: 8,
             width: 105,
             borderRadius: 6,
           }}
@@ -115,7 +115,7 @@ const User = ({ item }) => {
           onPress={() => sendFriendRequest(userId, item._id)}
           style={{
             backgroundColor: "#567189",
-            padding: 10,
+            padding: 8,
             borderRadius: 6,
             width: 105,
           }}

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-native";
 import React, { useLayoutEffect, useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -70,13 +70,17 @@ const HomeScreen = () => {
 
   console.log("users", users);
   return (
-    <View style={{ backgroundColor: "#fff", minHeight: 100 }}>
-      <View style={{ padding: 10 }}>
-        {users.map((item, index) => (
-          <User key={index} item={item} />
-        ))}
-      </View>
-    </View>
+    <>
+      <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: "#fff" }}>
+        <View style={{ backgroundColor: "#fff", minHeight: 100 }}>
+          <View style={{ padding: 10 }}>
+            {users.map((item, index) => (
+              <User key={index} item={item} />
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+    </>
   );
 };
 
