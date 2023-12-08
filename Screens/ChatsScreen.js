@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserType } from "../UserContext";
 import { useNavigation } from "@react-navigation/native";
 import UserChat from "../components/UserChat";
+import { MaterialIcons } from '@expo/vector-icons';
 
 const ChatsScreen = () => {
   const [acceptedFriends, setAcceptedFriends] = useState([]);
@@ -51,7 +52,9 @@ const ChatsScreen = () => {
           ))}
         </Pressable>
       </ScrollView>
-      <View style={{ width: 50, height: 50, backgroundColor: "#6DB3EC", position: "absolute", bottom: 20, right: 20, borderRadius: 50 }}></View>
+      <View style={{ width: 45, height: 45, backgroundColor: "#6DB3EC", position: "absolute", bottom: 30, right: 30, borderRadius: 15, display: "flex", alignItems: "center", justifyContent: 'center' }}>
+        <MaterialIcons name="message" size={20} color="#fff" />
+      </View>
     </>
   );
 };

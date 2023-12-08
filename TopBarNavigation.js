@@ -20,7 +20,7 @@ const TopBarNavigation = () => {
             },
         }} >
             <Tab.Screen name="Chats" component={ChatsScreen} options={{ headerShadowVisible: false }} />
-            <Tab.Screen name="Home" component={HomeScreen} options={{ headerShadowVisible: false }} />
+            <Tab.Screen name="Find Friends" component={HomeScreen} options={{ headerShadowVisible: false }} />
             <Tab.Screen name="Requests" component={FriendsScreen} options={{ headerShadowVisible: false }} />
         </Tab.Navigator >
     )
