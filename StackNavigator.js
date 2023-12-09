@@ -20,7 +20,7 @@ const StackNavigator = () => {
       try {
         const token = await AsyncStorage.getItem("authToken");
 
-        if (!token) {
+        if (token) {
           setIsLoggedIn(true);
         } else {
           setIsLoggedIn(false);
@@ -70,7 +70,7 @@ const StackNavigator = () => {
               component={RegisterScreen}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="Home" component={TopBarNavigation} options={{
+            <Stack.Screen name="ShiftChat" component={TopBarNavigation} options={{
               headerShadowVisible: false, headerStyle: { backgroundColor: '#6DB3EC' }, headerTitleStyle: { color: 'white', fontSize: 20, }, headerRight: () => (
                 <TouchableOpacity style={{ marginRight: 10 }} onPress={handleLogout}><MaterialIcons name="logout" size={24} color="white" /></TouchableOpacity>),
             }} />

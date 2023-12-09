@@ -21,7 +21,7 @@ const LoginScreen = () => {
         const token = await AsyncStorage.getItem("authToken");
 
         if (token) {
-          navigation.replace("Home");
+          navigation.replace("ShiftChat");
         } else {
           // token not found , show the login screen itself
         }
@@ -33,6 +33,7 @@ const LoginScreen = () => {
     checkLoginStatus();
   }, []);
   const handleLogin = () => {
+
     const user = {
       email: email,
       password: password,
@@ -45,7 +46,7 @@ const LoginScreen = () => {
         const token = response.data.token;
         AsyncStorage.setItem("authToken", token);
 
-        navigation.replace("Home");
+        navigation.replace("ShiftChat");
       })
       .catch((error) => {
         Alert.alert("Login Error", "Invalid email or password");
