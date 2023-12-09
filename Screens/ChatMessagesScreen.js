@@ -19,6 +19,8 @@ import EmojiSelector from "react-native-emoji-selector";
 import { UserType } from "../UserContext";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
+import { StatusBar } from 'react-native';
+
 
 const ChatMessagesScreen = () => {
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
@@ -255,6 +257,7 @@ const ChatMessagesScreen = () => {
     >
       <KeyboardAvoidingView style={{ flex: 1 }}>
         <ScrollView ref={scrollViewRef} contentContainerStyle={{ flexGrow: 1 }} onContentSizeChange={handleContentSizeChange}>
+          <StatusBar backgroundColor="#6DB3EC" barStyle="light-content" />
           {messages.map((item, index) => {
             if (item.messageType === "text") {
               const isSelected = selectedMessages.includes(item._id);

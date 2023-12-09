@@ -8,6 +8,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import User from "../components/User";
+import { StatusBar } from 'react-native';
+
 const HomeScreen = () => {
   const navigation = useNavigation();
   const { userId, setUserId } = useContext(UserType);
@@ -73,6 +75,7 @@ const HomeScreen = () => {
     <>
       <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: "#fff" }}>
         <View style={{ backgroundColor: "#fff", minHeight: 100 }}>
+          <StatusBar backgroundColor="#6DB3EC" barStyle="light-content" />
           <View style={{ padding: 10 }}>
             {users.map((item, index) => (
               <User key={index} item={item} />
