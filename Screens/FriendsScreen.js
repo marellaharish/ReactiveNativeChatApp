@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useContext, useState } from "react";
+import { FlatList, StyleSheet, Text, View, RefreshControl } from "react-native";
 import axios from "axios";
 import { UserType } from "../UserContext";
 import FriendRequest from "../components/FriendRequest";
@@ -7,6 +7,8 @@ import FriendRequest from "../components/FriendRequest";
 const FriendsScreen = () => {
   const { userId, setUserId } = useContext(UserType);
   const [friendRequests, setFriendRequests] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
     fetchFriendRequests();
   }, []);
@@ -14,7 +16,7 @@ const FriendsScreen = () => {
   const fetchFriendRequests = async () => {
     try {
       const response = await axios.get(
-        `https://reactnativechatapp.onrender.com/friend-request/${userId}`
+        `http://192.168.2.185:8000/friend-request/${userId}`
       );
       if (response.status === 200) {
         const friendRequestsData = response.data.map((friendRequest) => ({
@@ -28,22 +30,38 @@ const FriendsScreen = () => {
       }
     } catch (err) {
       console.log("error message", err);
+    } finally {
+      setRefreshing(false);
     }
   };
 
-  console.log(friendRequests);
-  return (
-    <View style={{ padding: 10, marginHorizontal: 12 }}>
-      {friendRequests.length > 0 && <Text>Your Friend Requests!</Text>}
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchFriendRequests();
+  };
 
-      {friendRequests.map((item, index) => (
-        <FriendRequest
-          key={index}
-          item={item}
-          friendRequests={friendRequests}
-          setFriendRequests={setFriendRequests}
-        />
-      ))}
+  console.log(friendRequests);
+
+  return (
+    <View style={{ flex: 1, padding: 10, marginHorizontal: 12 }}>
+      <FlatList
+        data={friendRequests}
+        keyExtractor={(item) => item._id.toString()}
+        renderItem={({ item, index }) => (
+          <FriendRequest
+            key={index}
+            item={item}
+            friendRequests={friendRequests}
+            setFriendRequests={setFriendRequests}
+          />
+        )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ListHeaderComponent={
+          friendRequests.length > 0 && <Text>Your Friend Requests!</Text>
+        }
+      />
     </View>
   );
 };

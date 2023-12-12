@@ -8,8 +8,10 @@ import {
   Pressable,
   Image,
   ImageBackground,
+  Dimensions,
+  StatusBar
 } from "react-native";
-import React, { useState, useContext, useLayoutEffect, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect, useRef, useLayoutEffect } from "react";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -19,8 +21,7 @@ import EmojiSelector from "react-native-emoji-selector";
 import { UserType } from "../UserContext";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import { StatusBar } from 'react-native';
-
+import io from "socket.io-client";
 
 const ChatMessagesScreen = () => {
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
@@ -35,31 +36,80 @@ const ChatMessagesScreen = () => {
   const { userId, setUserId } = useContext(UserType);
 
   const scrollViewRef = useRef(null);
+  const socket = useRef(io("http://192.168.2.185:8000"));
 
   useEffect(() => {
-    scrollToBottom()
+    scrollToBottom();
   }, []);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const response = await fetch(
+          `http://192.168.2.185:8000/messages/${userId}/${recepientId}`
+        );
+        const data = await response.json();
+
+        if (response.ok) {
+          setMessages(data);
+        } else {
+          console.log("error showing messages", response.status.message);
+        }
+      } catch (error) {
+        console.log("error fetching messages", error);
+      }
+    };
+
+    fetchMessages();
+  }, [userId, recepientId]);
+
+  useEffect(() => {
+    const fetchRecepientData = async () => {
+      try {
+        const response = await fetch(
+          `http://192.168.2.185:8000/user/${recepientId}`
+        );
+
+        const data = await response.json();
+        setRecepientData(data);
+      } catch (error) {
+        console.log("error retrieving details", error);
+      }
+    };
+
+    fetchRecepientData();
+  }, [recepientId]);
+
+  useEffect(() => {
+    socket.current.on("newMessage", (newMessage) => {
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    });
+
+    socket.current.emit("joinRoom", { userId, recepientId });
+
+    return () => {
+      socket.current.disconnect();
+    };
+  }, [userId, recepientId]);
 
   const scrollToBottom = () => {
     if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({ animated: false })
+      scrollViewRef.current.scrollToEnd({ animated: false });
     }
-  }
+  };
 
   const handleContentSizeChange = () => {
     scrollToBottom();
-  }
+  };
 
   const handleEmojiPress = () => {
     setShowEmojiSelector(!showEmojiSelector);
   };
 
-
-
   const fetchMessages = async () => {
     try {
       const response = await fetch(
-        `https://reactnativechatapp.onrender.com/messages/${userId}/${recepientId}`
+        `http://192.168.2.185:8000/messages/${userId}/${recepientId}`
       );
       const data = await response.json();
 
@@ -73,30 +123,9 @@ const ChatMessagesScreen = () => {
     }
   };
 
-  useEffect(() => {
-    fetchMessages();
-  }, []);
-
-  useEffect(() => {
-    const fetchRecepientData = async () => {
-      try {
-        const response = await fetch(
-          `https://reactnativechatapp.onrender.com/user/${recepientId}`
-        );
-
-        const data = await response.json();
-        setRecepientData(data);
-      } catch (error) {
-        console.log("error retrieving details", error);
-      }
-    };
-
-    fetchRecepientData();
-  }, []);
   const handleSend = async (messageType, imageUri) => {
     try {
       if (message.trim() === "") {
-        // You can display an alert or take any other action to notify the user
         console.log("Empty message. Please enter a message.");
         return;
       }
@@ -104,7 +133,6 @@ const ChatMessagesScreen = () => {
       formData.append("senderId", userId);
       formData.append("recepientId", recepientId);
 
-      //if the message type id image or a normal text
       if (messageType === "image") {
         formData.append("messageType", "image");
         formData.append("imageFile", {
@@ -117,21 +145,31 @@ const ChatMessagesScreen = () => {
         formData.append("messageText", message);
       }
 
-      const response = await fetch("https://reactnativechatapp.onrender.com/messages", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "http://192.168.2.185:8000/messages",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         setMessage("");
         setSelectedImage("");
 
         fetchMessages();
+        socket.current.emit("sendMessage", {
+          senderId: userId,
+          recepientId: recepientId,
+          messageType: messageType,
+          messageText: message,
+        });
       }
     } catch (error) {
       console.log("error in sending the message", error);
     }
   };
+
 
   console.log("messages", selectedMessages);
   useLayoutEffect(() => {
@@ -197,7 +235,8 @@ const ChatMessagesScreen = () => {
 
   const deleteMessages = async (messageIds) => {
     try {
-      const response = await fetch("https://reactnativechatapp.onrender.com/deleteMessages", {
+      // const response = await fetch("http://192.168.2.185:8000/deleteMessages", {
+      const response = await fetch("http://192.168.2.185:8000/deleteMessages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -250,14 +289,52 @@ const ChatMessagesScreen = () => {
       ]);
     }
   };
+  var width = Dimensions.get('window').width; //full width
+
+  const currentDate = new Date();
+  const currentDay = currentDate.getDate();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+
+
+  const dateObject = new Date();
+  const dateDay = dateObject.getDate();
+  const dateMonth = dateObject.getMonth();
+  const dateYear = dateObject.getFullYear();
+
+  let displayText;
+
+  if (currentYear === dateYear && currentMonth === dateMonth && currentDay === dateDay) {
+    displayText = 'Today';
+  } else {
+    const yesterday = new Date(currentDate);
+    yesterday.setDate(currentDay - 1);
+
+    if (yesterday.getDate() === dateDay && yesterday.getMonth() === dateMonth && yesterday.getFullYear() === dateYear) {
+      displayText = 'Yesterday';
+    } else {
+      // Format the date as needed for other days
+      displayText = `${dateDay}/${dateMonth + 1}/${dateYear}`;
+    }
+  }
+
+
+
+
   return (
     <ImageBackground
       source={require("../assets/ChatBg.jpg")} // replace with the actual path to your background image
       style={{ flex: 1 }}
     >
-      <KeyboardAvoidingView style={{ flex: 1 }}>
+      <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "##efeae2" }}>
         <ScrollView ref={scrollViewRef} contentContainerStyle={{ flexGrow: 1 }} onContentSizeChange={handleContentSizeChange}>
           <StatusBar backgroundColor="#6DB3EC" barStyle="light-content" />
+          <View style={{ display: "flex", justifyContent: "center", marginTop: 10, alignItems: "center" }}>
+            <Text style={{ textAlign: "center", backgroundColor: "#ffffff", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8 }}>{displayText}</Text>
+          </View>
+          {/* <View style={{ display: "flex", justifyContent: "center", marginTop: 10, alignItems: "center", width: width, backgroundColor: "#ffffff77", paddingVertical: 8 }}>
+          <Text style={{ textAlign: "center", backgroundColor: "#ffffff", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8 }}>1 Unread Message</Text>
+        </View> */}
           {messages.map((item, index) => {
             if (item.messageType === "text") {
               const isSelected = selectedMessages.includes(item._id);
@@ -267,17 +344,21 @@ const ChatMessagesScreen = () => {
                   key={index}
                   style={[
                     item?.senderId?._id === userId
-                      ? {
+                      ?
+                      {
                         alignSelf: "flex-end",
-                        backgroundColor: "#DCF8C6",
+                        backgroundColor: "#d9fdd3",
                         padding: 4,
                         maxWidth: "60%",
                         minWidth: 80,
                         borderRadius: 7,
                         margin: 5,
                         paddingLeft: 10,
-                        paddingTop: 10
+                        paddingRight: 45,
+                        paddingTop: 8,
+                        paddingBottom: 8
                       }
+
                       : {
                         alignSelf: "flex-start",
                         backgroundColor: "white",
@@ -285,9 +366,11 @@ const ChatMessagesScreen = () => {
                         maxWidth: "60%",
                         minWidth: 80,
                         borderRadius: 7,
+                        paddingRight: 45,
                         margin: 5,
                         paddingLeft: 10,
-                        paddingTop: 10
+                        paddingTop: 8,
+                        paddingBottom: 8
                       },
 
                     isSelected && { Width: "%", backgroundColor: "#F0FFFF" },
@@ -296,21 +379,22 @@ const ChatMessagesScreen = () => {
                   <Text
                     style={{
                       fontSize: 14,
-                      textAlign: isSelected ? "right" : "left",
+                      // textAlign: isSelected ? "right" : "left",
                     }}
                   >
                     {item?.message}
                   </Text>
-                  <Text
-                    style={{
-                      textAlign: "right",
-                      fontSize: 8,
-                      color: "gray",
-                      marginTop: 0,
-                    }}
-                  >
-                    {formatTime(item.timeStamp)}
-                  </Text>
+                  <Text style={{ position: "absolute", right: 8, bottom: 5, fontSize: 8 }}>{formatTime(item.timeStamp)}</Text>
+                  {/* <Text
+                  style={{
+                    textAlign: "right",
+                    fontSize: 8,
+                    color: "gray",
+                    marginTop: 0,
+                  }}
+                >
+                  {formatTime(item.timeStamp)}
+                </Text> */}
                 </Pressable>
               );
             }

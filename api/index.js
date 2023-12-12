@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const { Server } = require("socket.io"); // Import Socket.io
 
 const app = express();
 const port = 8000;
@@ -26,22 +27,42 @@ mongoose
     console.log("Error connecting to MongoDb", err);
   });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log("Server running on port 8000");
 });
 
+const io = new Server(server); // Create a Socket.io server
+
+// Socket.io connection event
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  // Handle events here (e.g., chat messages)
+  socket.on("chat message", (msg) => {
+    console.log("Message:", msg);
+    // Broadcast the message to all connected clients
+    io.emit("chat message", msg);
+  });
+
+  // Handle disconnect event
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
+
+// REST API routes go here (e.g., app.get, app.post)
+
 const User = require("./models/user");
 const Message = require("./models/message");
+
 
 //endpoint for registration of the user
 
 app.post("/register", (req, res) => {
   const { name, email, password, image } = req.body;
 
-  // create a new User object
   const newUser = new User({ name, email, password, image });
 
-  // save the user to the database
   newUser
     .save()
     .then(() => {

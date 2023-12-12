@@ -10,7 +10,7 @@ const UserChat = ({ item }) => {
   const fetchMessages = async () => {
     try {
       const response = await fetch(
-        `https://reactnativechatapp.onrender.com/messages/${userId}/${item._id}`
+        `http://192.168.2.185:8000/messages/${userId}/${item._id}`
       );
       const data = await response.json();
 
@@ -53,14 +53,15 @@ const UserChat = ({ item }) => {
       }
       style={{
         flexDirection: "row",
-        alignItems: "center",
+        alignItems: "flex-start",
         gap: 10,
         borderWidth: 0,
         borderColor: "#D0D0D0",
         borderTopWidth: 0,
         borderLeftWidth: 0,
         borderRightWidth: 0,
-        padding: 8,
+        paddingVertical: 12,
+        paddingLeft: 15,
       }}
     >
       <Image

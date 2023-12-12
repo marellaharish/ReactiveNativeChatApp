@@ -1,5 +1,13 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-native";
 import React, { useLayoutEffect, useContext, useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+  StatusBar,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -8,12 +16,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import User from "../components/User";
-import { StatusBar } from 'react-native';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const { userId, setUserId } = useContext(UserType);
   const [users, setUsers] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -25,6 +33,11 @@ const HomeScreen = () => {
     }
   };
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchUsers();
+  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "",
@@ -33,7 +46,12 @@ const HomeScreen = () => {
       ),
       headerRight: () => (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <Ionicons onPress={() => navigation.navigate("Chats")} name="chatbox-ellipses-outline" size={24} color="black" />
+          <Ionicons
+            onPress={() => navigation.navigate("Chats")}
+            name="chatbox-ellipses-outline"
+            size={24}
+            color="black"
+          />
           <MaterialIcons
             onPress={() => navigation.navigate("Friends")}
             name="people-outline"
@@ -44,36 +62,42 @@ const HomeScreen = () => {
           <TouchableOpacity onPress={handleLogout}>
             <MaterialIcons name="logout" size={24} color="black" />
           </TouchableOpacity>
-
         </View>
       ),
     });
   }, []);
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
       const token = await AsyncStorage.getItem("authToken");
       const decodedToken = jwt_decode(token);
       const userId = decodedToken.userId;
       setUserId(userId);
 
-      axios
-        .get(`https://reactnativechatapp.onrender.com/users/${userId}`)
-        .then((response) => {
-          setUsers(response.data);
-        })
-        .catch((error) => {
-          console.log("error retrieving users", error);
-        });
-    };
+      const response = await axios.get(
+        `http://192.168.2.185:8000/users/${userId}`
+      );
+      setUsers(response.data);
+    } catch (error) {
+      console.log("error retrieving users", error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
-    fetchUsers();
-  }, []);
-
-  console.log("users", users);
   return (
     <>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: "#fff" }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ backgroundColor: "#fff" }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={{ backgroundColor: "#fff", minHeight: 100 }}>
           <StatusBar backgroundColor="#6DB3EC" barStyle="light-content" />
           <View style={{ padding: 10 }}>
