@@ -22,7 +22,7 @@ const ChatsScreen = () => {
         }
 
         const response = await fetch(
-          `http://192.168.2.185:8000/accepted-friends/${userId}`
+          `https://reactnativechatapp.onrender.com/accepted-friends/${userId}`
         );
         const data = await response.json();
 
