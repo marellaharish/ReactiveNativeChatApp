@@ -40,7 +40,7 @@ const LoginScreen = () => {
     };
 
     axios
-      .post("https://reactnativechatapp.onrender.com/login", user)
+      .post("http://192.168.2.185:8000/login", user)
       .then((response) => {
         console.log(response);
         const token = response.data.token;

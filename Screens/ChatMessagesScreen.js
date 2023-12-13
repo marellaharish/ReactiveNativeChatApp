@@ -36,7 +36,7 @@ const ChatMessagesScreen = () => {
   const { userId, setUserId } = useContext(UserType);
 
   const scrollViewRef = useRef(null);
-  const socket = useRef(io("https://reactnativechatapp.onrender.com"));
+  const socket = useRef(io("http://192.168.2.185:8000"));
 
   useEffect(() => {
     scrollToBottom();
@@ -46,7 +46,7 @@ const ChatMessagesScreen = () => {
     const fetchMessages = async () => {
       try {
         const response = await fetch(
-          `https://reactnativechatapp.onrender.com/messages/${userId}/${recepientId}`
+          `http://192.168.2.185:8000/messages/${userId}/${recepientId}`
         );
         const data = await response.json();
 
@@ -67,7 +67,7 @@ const ChatMessagesScreen = () => {
     const fetchRecepientData = async () => {
       try {
         const response = await fetch(
-          `https://reactnativechatapp.onrender.com/user/${recepientId}`
+          `http://192.168.2.185:8000/user/${recepientId}`
         );
 
         const data = await response.json();
@@ -109,7 +109,7 @@ const ChatMessagesScreen = () => {
   const fetchMessages = async () => {
     try {
       const response = await fetch(
-        `https://reactnativechatapp.onrender.com/messages/${userId}/${recepientId}`
+        `http://192.168.2.185:8000/messages/${userId}/${recepientId}`
       );
       const data = await response.json();
 
@@ -146,7 +146,7 @@ const ChatMessagesScreen = () => {
       }
 
       const response = await fetch(
-        "https://reactnativechatapp.onrender.com/messages",
+        "http://192.168.2.185:8000/messages",
         {
           method: "POST",
           body: formData,
@@ -235,8 +235,8 @@ const ChatMessagesScreen = () => {
 
   const deleteMessages = async (messageIds) => {
     try {
-      // const response = await fetch("https://reactnativechatapp.onrender.com/deleteMessages", {
-      const response = await fetch("https://reactnativechatapp.onrender.com/deleteMessages", {
+      // const response = await fetch("http://192.168.2.185:8000/deleteMessages", {
+      const response = await fetch("http://192.168.2.185:8000/deleteMessages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -261,19 +261,51 @@ const ChatMessagesScreen = () => {
     const options = { hour: "numeric", minute: "numeric" };
     return new Date(time).toLocaleString("en-US", options);
   };
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
 
-    console.log(result);
-    if (!result.canceled) {
-      handleSend("image", result.uri);
+  const formatFullDate = (date) => {
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    const dateObject = new Date(date);
+    const day = dateObject.toLocaleDateString("en-US", { day: "2-digit" });
+    const month = dateObject.toLocaleDateString("en-US", { month: "long" });
+    const year = dateObject.toLocaleDateString("en-US", { year: "numeric" });
+
+    return `${day} ${month} ${year}`;
+  };
+
+  // const pickImage = async () => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
+
+  //   console.log(result);
+  //   if (!result.canceled) {
+  //     handleSend("image", result.uri);
+  //   }
+  // };
+
+  const pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      console.log(result);
+      if (!result.canceled) {
+        const selectedAsset = result.assets[0];
+        handleSend("image", selectedAsset.uri);
+      }
+    } catch (error) {
+      console.log("Error picking image", error);
     }
   };
+
+
   const handleSelectMessage = (message) => {
     //check if the message is already selected
     const isSelected = selectedMessages.includes(message._id);
@@ -291,34 +323,6 @@ const ChatMessagesScreen = () => {
   };
   var width = Dimensions.get('window').width; //full width
 
-  const currentDate = new Date();
-  const currentDay = currentDate.getDate();
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
-
-
-  const dateObject = new Date();
-  const dateDay = dateObject.getDate();
-  const dateMonth = dateObject.getMonth();
-  const dateYear = dateObject.getFullYear();
-
-  let displayText;
-
-  if (currentYear === dateYear && currentMonth === dateMonth && currentDay === dateDay) {
-    displayText = 'Today';
-  } else {
-    const yesterday = new Date(currentDate);
-    yesterday.setDate(currentDay - 1);
-
-    if (yesterday.getDate() === dateDay && yesterday.getMonth() === dateMonth && yesterday.getFullYear() === dateYear) {
-      displayText = 'Yesterday';
-    } else {
-      // Format the date as needed for other days
-      displayText = `${dateDay}/${dateMonth + 1}/${dateYear}`;
-    }
-  }
-
-
 
 
   return (
@@ -329,63 +333,69 @@ const ChatMessagesScreen = () => {
       <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "##efeae2" }}>
         <ScrollView ref={scrollViewRef} contentContainerStyle={{ flexGrow: 1 }} onContentSizeChange={handleContentSizeChange}>
           <StatusBar backgroundColor="#6DB3EC" barStyle="light-content" />
-          <View style={{ display: "flex", justifyContent: "center", marginTop: 10, alignItems: "center" }}>
-            <Text style={{ textAlign: "center", backgroundColor: "#ffffff", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8 }}>{displayText}</Text>
-          </View>
-          {/* <View style={{ display: "flex", justifyContent: "center", marginTop: 10, alignItems: "center", width: width, backgroundColor: "#ffffff77", paddingVertical: 8 }}>
-          <Text style={{ textAlign: "center", backgroundColor: "#ffffff", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8 }}>1 Unread Message</Text>
-        </View> */}
+
+
           {messages.map((item, index) => {
+            console.log(item);
+
             if (item.messageType === "text") {
               const isSelected = selectedMessages.includes(item._id);
               return (
-                <Pressable
-                  onLongPress={() => handleSelectMessage(item)}
-                  key={index}
-                  style={[
-                    item?.senderId?._id === userId
-                      ?
-                      {
-                        alignSelf: "flex-end",
-                        backgroundColor: "#d9fdd3",
-                        padding: 4,
-                        maxWidth: "60%",
-                        minWidth: 80,
-                        borderRadius: 7,
-                        margin: 5,
-                        paddingLeft: 10,
-                        paddingRight: 45,
-                        paddingTop: 8,
-                        paddingBottom: 8
-                      }
+                <>
+                  {
+                    <View style={{ display: "flex", justifyContent: "center", marginTop: 10, alignItems: "center" }}>
+                      <Text style={{ textAlign: "center", backgroundColor: "#ffffff", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8, fontSize: 10 }}>
+                        {formatFullDate(item.timeStamp)}
 
-                      : {
-                        alignSelf: "flex-start",
-                        backgroundColor: "white",
-                        padding: 4,
-                        maxWidth: "60%",
-                        minWidth: 80,
-                        borderRadius: 7,
-                        paddingRight: 45,
-                        margin: 5,
-                        paddingLeft: 10,
-                        paddingTop: 8,
-                        paddingBottom: 8
-                      },
+                      </Text>
+                    </View>}
+                  <Pressable
+                    onLongPress={() => handleSelectMessage(item)}
+                    key={index}
+                    style={[
+                      item?.senderId?._id === userId
+                        ?
+                        {
+                          alignSelf: "flex-end",
+                          backgroundColor: "#d9fdd3",
+                          padding: 4,
+                          maxWidth: "60%",
+                          minWidth: 80,
+                          borderRadius: 7,
+                          margin: 5,
+                          paddingLeft: 10,
+                          paddingRight: 45,
+                          paddingTop: 8,
+                          paddingBottom: 8
+                        }
 
-                    isSelected && { Width: "%", backgroundColor: "#F0FFFF" },
-                  ]}
-                >
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      // textAlign: isSelected ? "right" : "left",
-                    }}
+                        : {
+                          alignSelf: "flex-start",
+                          backgroundColor: "white",
+                          padding: 4,
+                          maxWidth: "60%",
+                          minWidth: 80,
+                          borderRadius: 7,
+                          paddingRight: 45,
+                          margin: 5,
+                          paddingLeft: 10,
+                          paddingTop: 8,
+                          paddingBottom: 8
+                        },
+
+                      isSelected && { Width: "%", backgroundColor: "#F0FFFF" },
+                    ]}
                   >
-                    {item?.message}
-                  </Text>
-                  <Text style={{ position: "absolute", right: 8, bottom: 5, fontSize: 8 }}>{formatTime(item.timeStamp)}</Text>
-                  {/* <Text
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        // textAlign: isSelected ? "right" : "left",
+                      }}
+                    >
+                      {item?.message}
+                    </Text>
+                    <Text style={{ position: "absolute", right: 8, bottom: 5, fontSize: 8 }}>{formatTime(item.timeStamp)}</Text>
+                    {/* <Text
                   style={{
                     textAlign: "right",
                     fontSize: 8,
@@ -395,7 +405,8 @@ const ChatMessagesScreen = () => {
                 >
                   {formatTime(item.timeStamp)}
                 </Text> */}
-                </Pressable>
+                  </Pressable>
+                </>
               );
             }
 
@@ -451,6 +462,9 @@ const ChatMessagesScreen = () => {
               );
             }
           })}
+          <View style={{ display: "flex", justifyContent: "center", marginTop: 10, alignItems: "center", width: width, backgroundColor: "#ffffff77", paddingVertical: 8 }}>
+            <Text style={{ textAlign: "center", backgroundColor: "#ffffff", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8 }}>1 Unread Message</Text>
+          </View>
         </ScrollView>
         <View style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", margin: 10 }}>
           <View

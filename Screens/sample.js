@@ -36,7 +36,7 @@ const ChatMessagesScreen = () => {
     const { userId, setUserId } = useContext(UserType);
 
     const scrollViewRef = useRef(null);
-    const socket = useRef(io("https://reactnativechatapp.onrender.com"));
+    const socket = useRef(io("http://192.168.2.185:8000"));
 
     useEffect(() => {
         scrollToBottom();
@@ -46,7 +46,7 @@ const ChatMessagesScreen = () => {
         const fetchMessages = async () => {
             try {
                 const response = await fetch(
-                    `https://reactnativechatapp.onrender.com/messages/${userId}/${recepientId}`
+                    `http://192.168.2.185:8000/messages/${userId}/${recepientId}`
                 );
                 const data = await response.json();
 
@@ -67,7 +67,7 @@ const ChatMessagesScreen = () => {
         const fetchRecepientData = async () => {
             try {
                 const response = await fetch(
-                    `https://reactnativechatapp.onrender.com/user/${recepientId}`
+                    `http://192.168.2.185:8000/user/${recepientId}`
                 );
 
                 const data = await response.json();
@@ -109,7 +109,7 @@ const ChatMessagesScreen = () => {
     const fetchMessages = async () => {
         try {
             const response = await fetch(
-                `https://reactnativechatapp.onrender.com/messages/${userId}/${recepientId}`
+                `http://192.168.2.185:8000/messages/${userId}/${recepientId}`
             );
             const data = await response.json();
 
@@ -146,7 +146,7 @@ const ChatMessagesScreen = () => {
             }
 
             const response = await fetch(
-                "https://reactnativechatapp.onrender.com/messages",
+                "http://192.168.2.185:8000/messages",
                 {
                     method: "POST",
                     body: formData,
@@ -235,8 +235,8 @@ const ChatMessagesScreen = () => {
 
     const deleteMessages = async (messageIds) => {
         try {
-            // const response = await fetch("https://reactnativechatapp.onrender.com/deleteMessages", {
-            const response = await fetch("https://reactnativechatapp.onrender.com/deleteMessages", {
+            // const response = await fetch("http://192.168.2.185:8000/deleteMessages", {
+            const response = await fetch("http://192.168.2.185:8000/deleteMessages", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
