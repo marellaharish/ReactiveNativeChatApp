@@ -303,7 +303,7 @@ const ChatMessagesScreen = () => {
   };
   var width = Dimensions.get('window').width; //full width
 
-
+  let lastDisplayedDate = null;
 
 
 
@@ -318,19 +318,32 @@ const ChatMessagesScreen = () => {
 
 
           {messages.map((item, index) => {
-            console.log(item,);
+            console.log(item);
+
+            // Function to check if the current message is the first message of the day
+            const isFirstMessageOfDay = () => {
+              const currentDate = formatFullDate(item.timeStamp);
+              if (lastDisplayedDate !== currentDate) {
+                lastDisplayedDate = currentDate;
+                return true;
+              }
+              return false;
+            };
 
             if (item.messageType === "text") {
               const isSelected = selectedMessages.includes(item._id);
+              const displayDate = isFirstMessageOfDay();
+
               return (
                 <>
-                  <View style={{ display: "flex", justifyContent: "center", marginTop: 10, alignItems: "center" }}>
-                    <Text style={{ textAlign: "center", backgroundColor: "#ffffff", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8, fontSize: 10 }}>
-                      {formatFullDate(item.timeStamp)}
+                  {displayDate && (
+                    <View style={{ display: "flex", justifyContent: "center", marginTop: 10, alignItems: "center" }}>
+                      <Text style={{ textAlign: "center", backgroundColor: "#ffffff", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8, fontSize: 10 }}>
+                        {lastDisplayedDate}
+                      </Text>
+                    </View>
+                  )}
 
-                    </Text>
-
-                  </View>
                   <Pressable
                     onLongPress={() => handleSelectMessage(item)}
                     key={index}
@@ -350,7 +363,6 @@ const ChatMessagesScreen = () => {
                           paddingTop: 8,
                           paddingBottom: 8
                         }
-
                         : {
                           alignSelf: "flex-start",
                           backgroundColor: "white",
@@ -364,7 +376,6 @@ const ChatMessagesScreen = () => {
                           paddingTop: 8,
                           paddingBottom: 8
                         },
-
                       isSelected && { Width: "%", backgroundColor: "#F0FFFF" },
                     ]}
                   >
@@ -377,73 +388,76 @@ const ChatMessagesScreen = () => {
                       {item?.message}
                     </Text>
                     <Text style={{ position: "absolute", right: 8, bottom: 5, fontSize: 8 }}>{formatTime(item.timeStamp)}</Text>
-                    {/* <Text
-                  style={{
-                    textAlign: "right",
-                    fontSize: 8,
-                    color: "gray",
-                    marginTop: 0,
-                  }}
-                >
-                  {formatTime(item.timeStamp)}
-                </Text> */}
                   </Pressable>
                 </>
               );
             }
 
             if (item.messageType === "image") {
-              const baseUrl =
-                "/Users/sujananand/Build/messenger-project/api/files/";
+              const baseUrl = "/Users/sujananand/Build/messenger-project/api/files/";
               const imageUrl = item.imageUrl;
               const filename = imageUrl.split("/").pop();
               const source = { uri: baseUrl + filename };
+              const displayDate = isFirstMessageOfDay();
+
               return (
-                <Pressable
-                  key={index}
-                  style={[
-                    item?.senderId?._id === userId
-                      ? {
-                        alignSelf: "flex-end",
-                        backgroundColor: "#DCF8C6",
-                        padding: 8,
-                        maxWidth: "60%",
-                        borderRadius: 7,
-                        margin: 10,
-                      }
-                      : {
-                        alignSelf: "flex-start",
-                        backgroundColor: "white",
-                        padding: 8,
-                        margin: 10,
-                        borderRadius: 7,
-                        maxWidth: "60%",
-                      },
-                  ]}
-                >
-                  <View>
-                    <Image
-                      source={source}
-                      style={{ width: 200, height: 200, borderRadius: 7 }}
-                    />
-                    <Text
-                      style={{
-                        textAlign: "right",
-                        fontSize: 9,
-                        position: "absolute",
-                        right: 10,
-                        bottom: 7,
-                        color: "white",
-                        marginTop: 5,
-                      }}
-                    >
-                      {formatTime(item?.timeStamp)}
-                    </Text>
-                  </View>
-                </Pressable>
+                <>
+                  {displayDate && (
+                    <View style={{ display: "flex", justifyContent: "center", marginTop: 10, alignItems: "center" }}>
+                      <Text style={{ textAlign: "center", backgroundColor: "#ffffff", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8, fontSize: 10 }}>
+                        {lastDisplayedDate}
+                      </Text>
+                    </View>
+                  )}
+
+                  <Pressable
+                    key={index}
+                    style={[
+                      item?.senderId?._id === userId
+                        ? {
+                          alignSelf: "flex-end",
+                          backgroundColor: "#DCF8C6",
+                          padding: 8,
+                          maxWidth: "60%",
+                          borderRadius: 7,
+                          margin: 10,
+                        }
+                        : {
+                          alignSelf: "flex-start",
+                          backgroundColor: "white",
+                          padding: 8,
+                          margin: 10,
+                          borderRadius: 7,
+                          maxWidth: "60%",
+                        },
+                    ]}
+                  >
+                    <View>
+                      <Image
+                        source={source}
+                        style={{ width: 200, height: 200, borderRadius: 7 }}
+                      />
+                      <Text
+                        style={{
+                          textAlign: "right",
+                          fontSize: 9,
+                          position: "absolute",
+                          right: 10,
+                          bottom: 7,
+                          color: "white",
+                          marginTop: 5,
+                        }}
+                      >
+                        {formatTime(item?.timeStamp)}
+                      </Text>
+                    </View>
+                  </Pressable>
+                </>
               );
             }
           })}
+
+
           <View style={{ display: "flex", justifyContent: "center", marginTop: 10, alignItems: "center", width: width, backgroundColor: "#ffffff77", paddingVertical: 8 }}>
             <Text style={{ textAlign: "center", backgroundColor: "#ffffff", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8 }}>1 Unread Message</Text>
           </View>
