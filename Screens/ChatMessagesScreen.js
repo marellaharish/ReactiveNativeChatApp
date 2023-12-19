@@ -106,6 +106,10 @@ const ChatMessagesScreen = () => {
     setShowEmojiSelector(!showEmojiSelector);
   };
 
+  const handlePress = () => {
+    navigation.navigate('Profile');
+  };
+
   const fetchMessages = async () => {
     try {
       const response = await fetch(
@@ -194,21 +198,23 @@ const ChatMessagesScreen = () => {
               </Text>
             </View>
           ) : (
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Image
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 15,
-                  resizeMode: "cover",
-                }}
-                source={{ uri: recepientData?.image }}
-              />
+            <Pressable onPress={handlePress}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Image
+                  style={{
+                    width: 30,
+                    height: 30,
+                    borderRadius: 15,
+                    resizeMode: "cover",
+                  }}
+                  source={{ uri: recepientData?.image }}
+                />
 
-              <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: "500", color: "#fff" }}>
-                {recepientData?.name}
-              </Text>
-            </View>
+                <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: "500", color: "#fff" }}>
+                  {recepientData?.name}
+                </Text>
+              </View>
+            </Pressable>
           )}
         </View>
       ),
