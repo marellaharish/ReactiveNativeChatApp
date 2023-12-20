@@ -12,6 +12,9 @@ const ChatsScreen = () => {
   const [loading, setLoading] = useState(true);  // Added loading state
   const { userId, setUserId } = useContext(UserType);
   const navigation = useNavigation();
+  const handlePress = () => {
+    navigation.navigate('Newchat');
+  };
 
   useEffect(() => {
     const acceptedFriendsList = async () => {
@@ -55,9 +58,12 @@ const ChatsScreen = () => {
           ))}
         </Pressable>
       </ScrollView>
-      <View style={{ width: 50, height: 50, backgroundColor: "#6DB3EC", position: "absolute", bottom: 30, right: 30, borderRadius: 15, display: "flex", alignItems: "center", justifyContent: 'center' }}>
-        <MaterialIcons name="message" size={23} color="#fff" />
-      </View>
+
+      <Pressable >
+        <View style={{ width: 50, height: 50, backgroundColor: "#6DB3EC", position: "absolute", bottom: 30, right: 30, borderRadius: 15, display: "flex", alignItems: "center", justifyContent: 'center' }}>
+          <MaterialIcons name="message" size={23} color="#fff" />
+        </View>
+      </Pressable>
     </>
   );
 };

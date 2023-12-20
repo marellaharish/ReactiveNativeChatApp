@@ -12,6 +12,7 @@ import TopBarNavigation from "./TopBarNavigation";
 import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProfileView from "./screens/ProfileView";
+import NewChats from "./screens/NewChats";
 
 const StackNavigator = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -59,6 +60,7 @@ const StackNavigator = () => {
             <Stack.Screen name="Chats" component={ChatsScreen} />
             <Stack.Screen name="Messages" component={ChatMessagesScreen} />
             <Stack.Screen name="Profile" component={ProfileView} />
+            <Stack.Screen name="Newchat" component={NewChats} />
 
           </>
         ) : (
@@ -76,11 +78,12 @@ const StackNavigator = () => {
             <Stack.Screen name="ShiftChat" component={TopBarNavigation} options={{
               headerShadowVisible: false, headerStyle: { backgroundColor: '#6DB3EC' }, headerTitleStyle: { color: 'white', fontSize: 20, }, headerRight: () => (
                 <TouchableOpacity style={{ marginRight: 10 }} onPress={handleLogout}><MaterialIcons name="logout" size={24} color="white" /></TouchableOpacity>),
-              }} />
+            }} />
             <Stack.Screen name="Friends" component={FriendsScreen} />
             <Stack.Screen name="Chats" component={ChatsScreen} />
             <Stack.Screen name="Messages" component={ChatMessagesScreen} />
             <Stack.Screen name="Profile" component={ProfileView} />
+            <Stack.Screen name="Newchat" component={NewChats} />
           </>
         )}
       </Stack.Navigator>

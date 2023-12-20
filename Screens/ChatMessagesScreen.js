@@ -107,7 +107,8 @@ const ChatMessagesScreen = () => {
   };
 
   const handlePress = () => {
-    navigation.navigate('Profile');
+    const { name, image, email } = recepientData;
+    navigation.navigate('Profile', { name, image, email });
   };
 
   const fetchMessages = async () => {

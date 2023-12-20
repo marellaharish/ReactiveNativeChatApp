@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { UserType } from "../UserContext";
-
+import { Ionicons } from '@expo/vector-icons';
 const UserChat = ({ item }) => {
   const { userId, setUserId } = useContext(UserType);
   const [messages, setMessages] = useState([]);
@@ -73,6 +73,7 @@ const UserChat = ({ item }) => {
         <Text style={{ fontSize: 15, fontWeight: "500" }}>{item?.name}</Text>
         {lastMessage && (
           <Text style={{ marginTop: 2, color: "gray", fontWeight: "500" }}>
+            <Ionicons name="checkmark-done" size={15} color="#6DB3EC" style={{ marginEnd: 3 }} />
             {lastMessage?.message}
           </Text>
         )}
