@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Image } from "react-native";
+import { StyleSheet, Text, View, Pressable, Image, Dimensions } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { UserType } from "../UserContext";
@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 const UserChat = ({ item }) => {
   const { userId, setUserId } = useContext(UserType);
   const [messages, setMessages] = useState([]);
+  const [notificationCount, setNotificationCount] = useState(0);
   const navigation = useNavigation();
   const fetchMessages = async () => {
     try {
@@ -44,13 +45,44 @@ const UserChat = ({ item }) => {
     const options = { hour: "numeric", minute: "numeric" };
     return new Date(time).toLocaleString("en-US", options);
   };
+  let ScreenHeight = Dimensions.get("window").height;
+
+  const fetchLatestMessagesCount = async () => {
+    try {
+      const response = await fetch(
+        `https://reactnativechatapp.onrender.com/messages/count/${userId}/${item._id}`
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        setNotificationCount(data.count);
+      } else {
+        console.log("Error fetching message count", response.status.message);
+      }
+    } catch (error) {
+      console.log("Error fetching message count", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLatestMessagesCount();
+  }, []);
+
+  const clearNotificationCount = () => {
+    // Clear the notification count when the chat is opened
+    setNotificationCount(0);
+  };
+
   return (
     <Pressable
-      onPress={() =>
+      onPress={() => {
         navigation.navigate("Messages", {
           recepientId: item._id,
-        })
-      }
+          clearNotificationCount, // Pass the function to clear the count
+        });
+        clearNotificationCount(); // Also clear the count when pressed
+      }}
+
       style={{
         flexDirection: "row",
         alignItems: "flex-start",
@@ -73,16 +105,23 @@ const UserChat = ({ item }) => {
         <Text style={{ fontSize: 15, fontWeight: "500" }}>{item?.name}</Text>
         {lastMessage && (
           <Text style={{ marginTop: 2, color: "gray", fontWeight: "500" }}>
-            <Ionicons name="checkmark-done" size={15} color="#6DB3EC" style={{ marginEnd: 3 }} />
+            <Ionicons name="checkmark-done" size={15} color="#8696a0" />
             {lastMessage?.message}
           </Text>
         )}
       </View>
 
-      <View>
-        <Text style={{ fontSize: 11, fontWeight: "400", color: "#585858", marginEnd: 15 }}>
+      <View style={{ display: 'flex', alignItems: "flex-end", marginEnd: 15 }}>
+        <Text style={{ fontSize: 11, fontWeight: "400", color: "#585858" }}>
           {lastMessage && formatTime(lastMessage?.timeStamp)}
         </Text>
+        {notificationCount > 0 && (
+          <View style={{ width: 18, height: 18, backgroundColor: "#6DB3EC", borderRadius: 50, display: "flex", alignItems: "center", justifyContent: "center", marginTop: 5 }}>
+            <Text style={{ color: "#fff", fontWeight: 500 }}>
+              {notificationCount}
+            </Text>
+          </View>
+        )}
       </View>
     </Pressable>
   );

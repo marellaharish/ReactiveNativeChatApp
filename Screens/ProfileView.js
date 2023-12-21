@@ -214,8 +214,8 @@ const ProfileView = () => {
 
                         <View>
                             <ToggleSwitch
-                                isOn={false}
-                                onColor="green"
+                                isOn={true}
+                                onColor="#6DB3EC"
                                 offColor="#ccc"
                                 size="small"
                                 onToggle={isOn => console.log("changed to : ", isOn)}

@@ -28,7 +28,10 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-typing-animation": "^0.1.7",
     "socket.io-client": "^4.7.2",
-    "toggle-switch-react-native": "^3.3.0"
+    "toggle-switch-react-native": "^3.3.0",
+    "expo-notifications": "~0.18.1",
+    "expo-device": "~5.2.1",
+    "expo-constants": "~14.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
