@@ -1,7 +1,10 @@
 import { StyleSheet, Text, View, Pressable, Image, Modal, TouchableWithoutFeedback } from "react-native";
 import React, { useContext, useState, useEffect } from "react";
 import { UserType } from "../UserContext";
-
+import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 const User = ({ item }) => {
   const { userId, setUserId } = useContext(UserType);
   const [requestSent, setRequestSent] = useState(false);
@@ -111,6 +114,12 @@ const User = ({ item }) => {
                   source={{ uri: item.image }}
                 />
                 <Text style={styles.overlayText}>{item?.name}</Text>
+                <View style={styles.BottomDiv}>
+                  <MaterialIcons name="message" size={20} color="#6DB3EC" />
+                  <Ionicons name="call" size={20} color="#6DB3EC" />
+                  <FontAwesome name="video-camera" size={20} color="#6DB3EC" />
+                  <AntDesign name="infocirlceo" size={20} color="#6DB3EC" />
+                </View>
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -122,46 +131,48 @@ const User = ({ item }) => {
         <Text style={{ fontWeight: "bold" }}>{item?.name}</Text>
         <Text style={{ marginTop: 4, color: "gray" }}>{item?.email}</Text>
       </View>
-      {userFriends.includes(item._id) ? (
-        <Pressable
-          style={{
-            backgroundColor: "#82CD47",
-            padding: 8,
-            width: 105,
-            borderRadius: 6,
-          }}
-        >
-          <Text style={{ textAlign: "center", color: "white" }}>Friends</Text>
-        </Pressable>
-      ) : requestSent || friendRequests.some((friend) => friend._id === item._id) ? (
-        <Pressable
-          style={{
-            backgroundColor: "gray",
-            padding: 8,
-            width: 105,
-            borderRadius: 6,
-          }}
-        >
-          <Text style={{ textAlign: "center", color: "white", fontSize: 13 }}>
-            Request Sent
-          </Text>
-        </Pressable>
-      ) : (
-        <Pressable
-          onPress={() => sendFriendRequest(userId, item._id)}
-          style={{
-            backgroundColor: "#567189",
-            padding: 8,
-            borderRadius: 6,
-            width: 105,
-          }}
-        >
-          <Text style={{ textAlign: "center", color: "white", fontSize: 13 }}>
-            Add Friend
-          </Text>
-        </Pressable>
-      )}
-    </Pressable>
+      {
+        userFriends.includes(item._id) ? (
+          <Pressable
+            style={{
+              backgroundColor: "#82CD47",
+              padding: 8,
+              width: 105,
+              borderRadius: 6,
+            }}
+          >
+            <Text style={{ textAlign: "center", color: "white" }}>Friends</Text>
+          </Pressable>
+        ) : requestSent || friendRequests.some((friend) => friend._id === item._id) ? (
+          <Pressable
+            style={{
+              backgroundColor: "gray",
+              padding: 8,
+              width: 105,
+              borderRadius: 6,
+            }}
+          >
+            <Text style={{ textAlign: "center", color: "white", fontSize: 13 }}>
+              Request Sent
+            </Text>
+          </Pressable>
+        ) : (
+          <Pressable
+            onPress={() => sendFriendRequest(userId, item._id)}
+            style={{
+              backgroundColor: "#567189",
+              padding: 8,
+              borderRadius: 6,
+              width: 105,
+            }}
+          >
+            <Text style={{ textAlign: "center", color: "white", fontSize: 13 }}>
+              Add Friend
+            </Text>
+          </Pressable>
+        )
+      }
+    </Pressable >
   );
 };
 
@@ -196,4 +207,12 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingLeft: 15,
   },
+  BottomDiv: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    width: "100%",
+    height: 50
+  }
 });
