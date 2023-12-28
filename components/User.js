@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Image } from "react-native";
+import { StyleSheet, Text, View, Pressable, Image, Modal, TouchableWithoutFeedback } from "react-native";
 import React, { useContext, useState, useEffect } from "react";
 import { UserType } from "../UserContext";
 
@@ -66,20 +66,56 @@ const User = ({ item }) => {
   };
   console.log("friend requests sent", friendRequests);
   console.log("user friends", userFriends);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleImageClick = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <Pressable
       style={{ flexDirection: "row", alignItems: "center", marginVertical: 10 }}
     >
       <View>
-        <Image
-          style={{
-            width: 50,
-            height: 50,
-            borderRadius: 25,
-            resizeMode: "cover",
-          }}
-          source={{ uri: item.image }}
-        />
+        <TouchableWithoutFeedback onPress={handleImageClick}>
+          <Image
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 25,
+              resizeMode: 'cover',
+            }}
+            source={{ uri: item.image }}
+          />
+        </TouchableWithoutFeedback>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={closeModal}
+        >
+          <TouchableWithoutFeedback onPress={closeModal}>
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <Image
+                  style={{
+                    width: 250,
+                    height: 250,
+                    resizeMode: 'cover',
+                  }}
+                  source={{ uri: item.image }}
+                />
+                <Text style={styles.overlayText}>{item?.name}</Text>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+
+        </Modal>
       </View>
 
       <View style={{ marginLeft: 12, flex: 1 }}>
@@ -131,4 +167,33 @@ const User = ({ item }) => {
 
 export default User;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust the opacity as needed
+    alignItems: 'center',
+    position: "relative",
+  },
+  modalContent: {
+    width: 250,
+    height: 300,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: "white",
+    top: 100,
+    borderRadius: 8,
+    position: "relative",
+    overflow: "hidden"
+  },
+  overlayText: {
+    position: 'absolute',
+    color: 'white', // Change text color as needed
+    fontSize: 16, // Adjust font size as needed
+    fontWeight: 'bold', // Adjust font weight as needed 
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust the opacity as needed
+    width: "100%",
+    textAlign: 'left',
+    paddingVertical: 8,
+    paddingLeft: 15,
+  },
+});

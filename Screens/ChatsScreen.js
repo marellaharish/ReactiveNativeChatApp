@@ -55,31 +55,25 @@ const ChatsScreen = () => {
   let ScreenHeight = Dimensions.get("window").height;
   return (
     <>
-      <ScrollView
-        style={{ height: ScreenHeight }}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={onRefresh}
-          />
-        }
-      >
-
-        <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: "#fff" }}>
-          <StatusBar backgroundColor="#6DB3EC" barStyle="light-content" />
-          <Pressable>
-            {acceptedFriends.map((item, index) => (
-              <UserChat key={index} item={item} />
-            ))}
-          </Pressable>
-        </ScrollView>
-
-        {/* <Pressable >
-          <View style={{ width: 50, height: 50, backgroundColor: "#6DB3EC", position: "absolute", bottom: 30, right: 30, borderRadius: 15, display: "flex", alignItems: "center", justifyContent: 'center' }}>
-            <MaterialIcons name="message" size={23} color="#fff" />
-          </View>
-        </Pressable> */}
+      <ScrollView refreshControl={
+        <RefreshControl
+          refreshing={isRefreshing}
+          onRefresh={onRefresh}
+        />
+      } showsVerticalScrollIndicator={false} style={{ backgroundColor: "#fff" }}>
+        <StatusBar backgroundColor="#6DB3EC" barStyle="light-content" />
+        <Pressable>
+          {acceptedFriends.map((item, index) => (
+            <UserChat key={index} item={item} />
+          ))}
+        </Pressable>
       </ScrollView>
+
+      <Pressable >
+        <View style={{ width: 50, height: 50, backgroundColor: "#6DB3EC", position: "absolute", bottom: 30, right: 30, borderRadius: 15, display: "flex", alignItems: "center", justifyContent: 'center' }}>
+          <MaterialIcons name="message" size={23} color="#fff" />
+        </View>
+      </Pressable>
     </>
   );
 };
