@@ -69,7 +69,7 @@ const ChatsScreen = () => {
         </Pressable>
       </ScrollView>
 
-      <Pressable >
+      <Pressable>
         <View style={{ width: 50, height: 50, backgroundColor: "#6DB3EC", position: "absolute", bottom: 30, right: 30, borderRadius: 15, display: "flex", alignItems: "center", justifyContent: 'center' }}>
           <MaterialIcons name="message" size={23} color="#fff" />
         </View>

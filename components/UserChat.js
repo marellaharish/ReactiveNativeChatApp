@@ -1,8 +1,11 @@
-import { StyleSheet, Text, View, Pressable, Image, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Pressable, Image, Modal, TouchableWithoutFeedback, Dimensions } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { UserType } from "../UserContext";
 import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 const UserChat = ({ item }) => {
   const { userId, setUserId } = useContext(UserType);
   const [messages, setMessages] = useState([]);
@@ -73,6 +76,21 @@ const UserChat = ({ item }) => {
     setNotificationCount(0);
   };
 
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleImageClick = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+  const handlePress = () => {
+    const { name, image, email } = item;
+    navigation.navigate('Profile', { name, image, email });
+  };
+
+
   return (
     <Pressable
       onPress={() => {
@@ -96,10 +114,56 @@ const UserChat = ({ item }) => {
         paddingLeft: 15,
       }}
     >
-      <Image
-        style={{ width: 45, height: 45, borderRadius: 25, resizeMode: "cover" }}
-        source={{ uri: item?.image }}
-      />
+      <View>
+        <TouchableWithoutFeedback onPress={handleImageClick}>
+          <Image
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 25,
+              resizeMode: 'cover',
+            }}
+            source={{ uri: item.image }}
+          />
+        </TouchableWithoutFeedback>
+
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={closeModal}
+        >
+          <TouchableWithoutFeedback onPress={closeModal}>
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <Image
+                  style={{
+                    width: 250,
+                    height: 250,
+                    resizeMode: 'cover',
+                  }}
+                  source={{ uri: item.image }}
+                />
+                <Text style={styles.overlayText}>{item?.name}</Text>
+                <View style={styles.BottomDiv}>
+                  <MaterialIcons name="message" size={20} color="#6DB3EC"
+                    onPress={() => {
+                      navigation.navigate("Messages", {
+                        recepientId: item._id,
+                      });
+                    }}
+
+                  />
+                  <Ionicons name="call" size={20} color="#6DB3EC" />
+                  <FontAwesome name="video-camera" size={20} color="#6DB3EC" />
+                  <AntDesign name="infocirlceo" size={20} color="#6DB3EC" onPress={handlePress} />
+                </View>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+
+        </Modal>
+      </View>
 
       <View style={{ flex: 1 }}>
         <Text style={{ fontSize: 15, fontWeight: "500" }}>{item?.name}</Text>
@@ -129,4 +193,43 @@ const UserChat = ({ item }) => {
 
 export default UserChat;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)', // Adjust the opacity as needed
+    alignItems: 'center',
+    position: "relative",
+  },
+  modalContent: {
+    width: 250,
+    height: 300,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: "white",
+    top: 100,
+    borderRadius: 8,
+    position: "relative",
+    overflow: "hidden"
+  },
+  overlayText: {
+    position: 'absolute',
+    color: 'white', // Change text color as needed
+    fontSize: 14, // Adjust font size as needed
+    fontWeight: 'bold', // Adjust font weight as needed 
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust the opacity as needed
+    width: "100%",
+    textAlign: 'left',
+    paddingVertical: 8,
+    paddingLeft: 15,
+
+  },
+  BottomDiv: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    width: "100%",
+    height: 50
+  }
+});
+
