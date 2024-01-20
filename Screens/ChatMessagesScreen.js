@@ -210,10 +210,14 @@ const ChatMessagesScreen = () => {
                   }}
                   source={{ uri: recepientData?.image }}
                 />
-
-                <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: "500", color: "#fff" }}>
-                  {recepientData?.name}
-                </Text>
+                <View style={{ display: "flex" }}>
+                  <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: "500", color: "#fff" }}>
+                    {recepientData?.name}
+                  </Text>
+                  <Text style={{ marginLeft: 10, fontSize: 12, color: "#fff" }}>
+                    Last seen today at 3:42 pm
+                  </Text>
+                </View>
               </View>
             </Pressable>
           )}
@@ -465,9 +469,9 @@ const ChatMessagesScreen = () => {
           })}
 
 
-          <View style={{ display: "flex", justifyContent: "center", marginTop: 10, alignItems: "center", width: width, backgroundColor: "#ffffff77", paddingVertical: 8 }}>
+          {/* <View style={{ display: "flex", justifyContent: "center", marginTop: 10, alignItems: "center", width: width, backgroundColor: "#ffffff77", paddingVertical: 8 }}>
             <Text style={{ textAlign: "center", backgroundColor: "#ffffff", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8 }}>1 Unread Message</Text>
-          </View>
+          </View> */}
         </ScrollView>
         <View style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", margin: 10 }}>
           <View

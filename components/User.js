@@ -69,62 +69,22 @@ const User = ({ item }) => {
   };
   console.log("friend requests sent", friendRequests);
   console.log("user friends", userFriends);
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const handleImageClick = () => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
 
   return (
     <Pressable
       style={{ flexDirection: "row", alignItems: "center", marginVertical: 10 }}
     >
       <View>
-        <TouchableWithoutFeedback onPress={handleImageClick}>
-          <Image
-            style={{
-              width: 50,
-              height: 50,
-              borderRadius: 25,
-              resizeMode: 'cover',
-            }}
-            source={{ uri: item.image }}
-          />
-        </TouchableWithoutFeedback>
+        <Image
+          style={{
+            width: 50,
+            height: 50,
+            borderRadius: 25,
+            resizeMode: 'cover',
+          }}
+          source={{ uri: item.image }}
+        />
 
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={closeModal}
-        >
-          <TouchableWithoutFeedback onPress={closeModal}>
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalContent}>
-                <Image
-                  style={{
-                    width: 250,
-                    height: 250,
-                    resizeMode: 'cover',
-                  }}
-                  source={{ uri: item.image }}
-                />
-                <Text style={styles.overlayText}>{item?.name}</Text>
-                <View style={styles.BottomDiv}>
-                  <MaterialIcons name="message" size={20} color="#6DB3EC" />
-                  <Ionicons name="call" size={20} color="#6DB3EC" />
-                  <FontAwesome name="video-camera" size={20} color="#6DB3EC" />
-                  <AntDesign name="infocirlceo" size={20} color="#6DB3EC" />
-                </View>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-
-        </Modal>
       </View>
 
       <View style={{ marginLeft: 12, flex: 1 }}>

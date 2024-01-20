@@ -47,6 +47,7 @@ const ProfileView = () => {
 
                     <Text style={{ fontSize: 18, fontWeight: 400, color: "#3b4a54", marginTop: 5 }}>{name}</Text>
                     <Text style={{ fontSize: 12, color: "#667781", marginVertical: 5 }}>{email}</Text>
+                    <Text style={{ fontSize: 12, color: "#667781", backgroundColor: "#6db3ec30", marginVertical: 5, padding: 3, paddingHorizontal: 10, borderRadius: 5 }}>Last seen today at 3:42 pm</Text>
 
                     <View style={{ display: "flex", flexDirection: "row", gap: 15, paddingVertical: 20 }}>
                         <View style={{ width: 100, height: 55, paddingVertical: 8, justifyContent: "center", display: "flex", alignItems: "center", borderWidth: 1, borderColor: "#f1f1f1", borderRadius: 8 }} >
