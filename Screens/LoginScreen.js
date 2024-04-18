@@ -19,7 +19,9 @@ const LoginScreen = () => {
     const checkLoginStatus = async () => {
       try {
         const token = await AsyncStorage.getItem("authToken");
-
+        const userInfo = await AsyncStorage.getItem("loginUserInfo");
+        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+        console.log(userInfo);
         if (token) {
           navigation.replace("ShiftChat");
         } else {
@@ -42,9 +44,13 @@ const LoginScreen = () => {
     axios
       .post("https://reactnativechatapp.onrender.com/login", user)
       .then((response) => {
-        console.log(response);
+        console.log(response + "################################################################");
         const token = response.data.token;
+        const userData = response.data.user;
+        console.log(response.data);
+        console.log(userData);
         AsyncStorage.setItem("authToken", token);
+        AsyncStorage.setItem("loginUserInfo", userData);
 
         navigation.replace("ShiftChat");
       })

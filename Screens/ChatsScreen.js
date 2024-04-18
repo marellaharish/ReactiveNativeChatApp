@@ -62,6 +62,7 @@ const ChatsScreen = () => {
         />
       } showsVerticalScrollIndicator={false} style={{ backgroundColor: "#fff" }}>
         <StatusBar backgroundColor="#6DB3EC" barStyle="light-content" />
+
         <Pressable>
           {acceptedFriends.map((item, index) => (
             <UserChat key={index} item={item} />

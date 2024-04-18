@@ -7,11 +7,27 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
-
+import React, { useState, useEffect } from "react";
 import DP from "../assets/5.png";
+import axios from "axios";
+
+
 const SettingsScreen = () => {
     const navigation = useNavigation();
     let ScreenHeight = Dimensions.get("window").height;
+    useEffect(() => {
+        axios.get('https://reactnativechatapp.onrender.com/current_user')
+            .then(response => {
+                // Log the user data to the console
+                console.log('Logged-in user:', response.data);
+            })
+            .catch(error => {
+                // Log any errors to the console
+                console.error('Error fetching user data:', error);
+            });
+    }, []);
+
+
     navigation.setOptions({
         headerTitle: "",
         headerStyle: {

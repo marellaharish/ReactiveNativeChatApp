@@ -9,7 +9,9 @@ import FriendsScreen from "./screens/FriendsScreen";
 import ChatsScreen from "./screens/ChatsScreen";
 import ChatMessagesScreen from "./screens/ChatMessagesScreen";
 import TopBarNavigation from "./TopBarNavigation";
-import { MaterialIcons } from '@expo/vector-icons';
+import BottomBarNavigation from "./BottomBarNavigation";
+import { MaterialIcons } from '@expo/vector-icons'
+import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProfileView from "./screens/ProfileView";
 import NewChats from "./screens/NewChats";
@@ -52,10 +54,12 @@ const StackNavigator = () => {
       <Stack.Navigator>
         {isLoggedIn ? (
           <>
-            <Stack.Screen name="ShiftChat" component={TopBarNavigation} options={{
-              headerShadowVisible: false, headerStyle: { backgroundColor: '#6DB3EC' }, headerTitleStyle: { color: 'white', fontSize: 20, }, headerRight: () => (
+
+            <Stack.Screen name="ShiftChat" component={BottomBarNavigation} options={{
+              headerShadowVisible: false, headerStyle: { backgroundColor: '#fff' }, headerTitleStyle: { color: '#6DB3EC', fontSize: 22, fontWeight: "600" }, headerRight: () => (
                 <>
-                  <TouchableOpacity style={{ marginRight: 10 }} onPress={handleLogout}><MaterialIcons name="logout" size={24} color="white" /></TouchableOpacity>
+                  {/* <TouchableOpacity style={{ marginRight: 10 }} onPress={handleLogout}><MaterialIcons name="logout" size={24} color="black" /></TouchableOpacity> */}
+                  <TouchableOpacity style={{ marginRight: 10 }} ><Feather name="search" size={24} color="black" /></TouchableOpacity>
                   <TouchableOpacity onPress={handleLogout}><DropDownSelect /></TouchableOpacity>
                 </>
               ),
@@ -81,7 +85,7 @@ const StackNavigator = () => {
               component={RegisterScreen}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="ShiftChat" component={TopBarNavigation} options={{
+            <Stack.Screen name="ShiftChat" component={BottomBarNavigation} options={{
               headerShadowVisible: false, headerStyle: { backgroundColor: '#6DB3EC' }, headerTitleStyle: { color: 'white', fontSize: 20, }, headerRight: () => (
                 <>
                   <TouchableOpacity style={{ marginRight: 10 }} onPress={handleLogout}><MaterialIcons name="logout" size={24} color="white" /></TouchableOpacity>

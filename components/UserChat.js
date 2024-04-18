@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Image, Modal, TouchableWithoutFeedback, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Pressable, Image, Modal, TouchableWithoutFeedback, Dimensions, StatusBar } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { UserType } from "../UserContext";
@@ -126,7 +126,6 @@ const UserChat = ({ item }) => {
             source={{ uri: item.image }}
           />
         </TouchableWithoutFeedback>
-
         <Modal
           animationType="fade"
           transparent={true}

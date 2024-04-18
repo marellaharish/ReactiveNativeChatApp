@@ -43,29 +43,37 @@ const FriendsScreen = () => {
   console.log(friendRequests);
 
   return (
-    <View style={{ flex: 1, padding: 10, marginHorizontal: 12 }}>
-      <FlatList
-        data={friendRequests}
-        keyExtractor={(item) => item._id.toString()}
-        renderItem={({ item, index }) => (
-          <FriendRequest
-            key={index}
-            item={item}
-            friendRequests={friendRequests}
-            setFriendRequests={setFriendRequests}
-          />
-        )}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        ListHeaderComponent={
-          friendRequests.length > 0 && <Text>Your Friend Requests!</Text>
-        }
-      />
+    <View style={styles.container}>
+      <View style={{ flex: 1, padding: 10, marginHorizontal: 12 }}>
+        <FlatList
+          data={friendRequests}
+          keyExtractor={(item) => item._id.toString()}
+          renderItem={({ item, index }) => (
+            <FriendRequest
+              key={index}
+              item={item}
+              friendRequests={friendRequests}
+              setFriendRequests={setFriendRequests}
+            />
+          )}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          ListHeaderComponent={
+            friendRequests.length > 0 && <Text>Your Friend Requests!</Text>
+          }
+        />
+      </View>
     </View>
   );
 };
 
 export default FriendsScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+});
+

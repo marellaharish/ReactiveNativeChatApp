@@ -16,6 +16,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import User from "../components/User";
+import DropDownSelect from "../components/DropDownSelect";
+
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -40,30 +42,14 @@ const HomeScreen = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "",
-      headerLeft: () => (
-        <Text style={{ fontSize: 16, fontWeight: "bold" }}>Swift Chat</Text>
+      headerShadowVisible: false, headerStyle: { backgroundColor: '#fff' }, headerTitleStyle: { color: '#6DB3EC', fontSize: 22, fontWeight: "600" }, headerRight: () => (
+        <>
+          {/* <TouchableOpacity style={{ marginRight: 10 }} onPress={handleLogout}><MaterialIcons name="logout" size={24} color="black" /></TouchableOpacity> */}
+          <TouchableOpacity style={{ marginRight: 10 }} ><Feather name="search" size={24} color="black" /></TouchableOpacity>
+          <TouchableOpacity onPress={handleLogout}><DropDownSelect /></TouchableOpacity>
+        </>
       ),
-      headerRight: () => (
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <Ionicons
-            onPress={() => navigation.navigate("Chats")}
-            name="chatbox-ellipses-outline"
-            size={24}
-            color="black"
-          />
-          <MaterialIcons
-            onPress={() => navigation.navigate("Friends")}
-            name="people-outline"
-            size={24}
-            color="black"
-          />
 
-          <TouchableOpacity onPress={handleLogout}>
-            <MaterialIcons name="logout" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
-      ),
     });
   }, []);
 
@@ -99,8 +85,8 @@ const HomeScreen = () => {
         }
       >
         <View style={{ backgroundColor: "#fff", minHeight: 100 }}>
-          <StatusBar backgroundColor="#6DB3EC" barStyle="light-content" />
-          <View style={{ padding: 10 }}>
+          <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+          <View >
             {users.map((item, index) => (
               <User key={index} item={item} />
             ))}

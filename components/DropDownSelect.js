@@ -33,7 +33,7 @@ const DropDownSelect = () => {
                     dropdownStyle={styles.dropdownContainer}
                 >
                     <View style={styles.dropdownTrigger}>
-                        <Entypo name="dots-three-vertical" size={18} color="#fff" />
+                        <Entypo name="dots-three-vertical" size={18} color="#000" />
                     </View>
                 </ModalDropdown>
             </View>
