@@ -5,7 +5,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { useNavigation, useRoute } from "@react-navigation/native";
 const DropDownSelect = () => {
     const [selectedOption, setSelectedOption] = useState(null);
-    const dropdownOptions = ['New Group', 'Linked Devices', 'Starred Messages', 'Settings'];
+    const dropdownOptions = ['My Friends', 'New Group', 'Linked Devices', 'Graph Reports', 'Starred Messages', 'Settings'];
     const navigation = useNavigation();
 
     const renderDropdownRow = (option, index, isSelected) => {
@@ -20,6 +20,12 @@ const DropDownSelect = () => {
         setSelectedOption(option);
         if (option === 'Settings') {
             navigation.navigate('SettingsScreen'); // Replace 'SettingsScreen' with the name of your screen
+        }
+        else if (option === 'My Friends') {
+            navigation.navigate('MyFriends');
+        }
+        else if (option === 'Graph Reports') {
+            navigation.navigate('GraphReports');
         }
     };
     return (
@@ -65,14 +71,16 @@ const styles = StyleSheet.create({
         shadowRadius: 12.22,
         elevation: 1,
         borderColor: 'transparent', // Set border color to transparent
-        borderWidth: 0, // Set bor 
+        borderWidth: 0,
         backgroundColor: '#fff',
+        width: 200
 
     },
     dropdownRow: {
         padding: 15,
         borderWidth: 0, // Set border width to 0 
         margin: 0
+
     },
     dropdownText: {
         fontSize: 14,

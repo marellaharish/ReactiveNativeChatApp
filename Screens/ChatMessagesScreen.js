@@ -181,7 +181,7 @@ const ChatMessagesScreen = () => {
     navigation.setOptions({
       headerTitle: "",
       headerStyle: {
-        backgroundColor: '#6DB3EC',
+        backgroundColor: '#FFF',
       },
       headerLeft: () => (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -189,12 +189,12 @@ const ChatMessagesScreen = () => {
             onPress={() => navigation.goBack()}
             name="arrow-back"
             size={24}
-            color="white"
+            color="black"
           />
 
           {selectedMessages.length > 0 ? (
             <View>
-              <Text style={{ fontSize: 16, fontWeight: "500", color: "#fff" }}>
+              <Text style={{ fontSize: 16, fontWeight: "500", color: "#000" }}>
                 {selectedMessages.length}
               </Text>
             </View>
@@ -211,10 +211,10 @@ const ChatMessagesScreen = () => {
                   source={{ uri: recepientData?.image }}
                 />
                 <View style={{ display: "flex" }}>
-                  <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: "500", color: "#fff" }}>
+                  <Text style={{ marginLeft: 10, fontSize: 16, fontWeight: "500", color: "#000" }}>
                     {recepientData?.name}
                   </Text>
-                  <Text style={{ marginLeft: 10, fontSize: 12, color: "#fff" }}>
+                  <Text style={{ marginLeft: 10, fontSize: 12, color: "#000" }}>
                     Last seen today at 3:42 pm
                   </Text>
                 </View>
@@ -226,20 +226,20 @@ const ChatMessagesScreen = () => {
       headerRight: () =>
         selectedMessages.length > 0 ? (
           <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
-            <Ionicons name="md-arrow-redo-sharp" size={20} color="white" />
-            <Ionicons name="md-arrow-undo" size={20} color="white" />
-            <FontAwesome name="star" size={20} color="white" />
+            <Ionicons name="md-arrow-redo-sharp" size={20} color="black" />
+            <Ionicons name="md-arrow-undo" size={20} color="black" />
+            <FontAwesome name="star" size={20} color="black" />
             <MaterialIcons
               onPress={() => deleteMessages(selectedMessages)}
               name="delete"
               size={20}
-              color="white"
+              color="black"
             />
           </View>
         ) : (<View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
-          <FontAwesome name="video-camera" size={18} color="#fff" />
-          <Ionicons name="call" size={18} color="#fff" />
-          <Entypo name="dots-three-vertical" size={18} color="#fff" />
+          <FontAwesome name="video-camera" size={18} color="#000" />
+          <Ionicons name="call" size={18} color="#000" />
+          <Entypo name="dots-three-vertical" size={18} color="#000" />
         </View>),
     });
   }, [recepientData, selectedMessages]);
@@ -325,7 +325,7 @@ const ChatMessagesScreen = () => {
     >
       <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "##efeae2" }}>
         <ScrollView ref={scrollViewRef} contentContainerStyle={{ flexGrow: 1 }} onContentSizeChange={handleContentSizeChange}>
-          <StatusBar backgroundColor="#6DB3EC" barStyle="light-content" />
+          <StatusBar backgroundColor="#FFF" barStyle="dark-content" />
 
 
           {messages.map((item, index) => {
@@ -344,6 +344,8 @@ const ChatMessagesScreen = () => {
             if (item.messageType === "text") {
               const isSelected = selectedMessages.includes(item._id);
               const displayDate = isFirstMessageOfDay();
+
+
 
               return (
                 <>

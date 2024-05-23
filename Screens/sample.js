@@ -328,7 +328,7 @@ const ChatMessagesScreen = () => {
         >
             <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "##efeae2" }}>
                 <ScrollView ref={scrollViewRef} contentContainerStyle={{ flexGrow: 1 }} onContentSizeChange={handleContentSizeChange}>
-                    <StatusBar backgroundColor="#6DB3EC" barStyle="light-content" />
+                    <StatusBar backgroundColor="#FFF" barStyle="dark-content" />
                     <View style={{ display: "flex", justifyContent: "center", marginTop: 10, alignItems: "center" }}>
                         <Text style={{ textAlign: "center", backgroundColor: "#ffffff", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8 }}>{displayText}</Text>
                     </View>

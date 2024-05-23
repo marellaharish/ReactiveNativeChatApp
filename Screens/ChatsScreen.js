@@ -61,7 +61,7 @@ const ChatsScreen = () => {
           onRefresh={onRefresh}
         />
       } showsVerticalScrollIndicator={false} style={{ backgroundColor: "#fff" }}>
-        <StatusBar backgroundColor="#6DB3EC" barStyle="light-content" />
+        <StatusBar backgroundColor="#FFF" barStyle="dark-content" />
 
         <Pressable>
           {acceptedFriends.map((item, index) => (

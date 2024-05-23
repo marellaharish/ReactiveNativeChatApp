@@ -17,7 +17,6 @@ const BottomBarNavigation = () => {
             <Tab.Navigator
                 swipeEnabled={true}
                 tabBarVisible={false}
-                lazy={true}
                 screenOptions={{
                     headerShadowVisible: false,
                     tabBarLabelStyle: { fontSize: 13, textTransform: 'capitalize', color: "#000" },

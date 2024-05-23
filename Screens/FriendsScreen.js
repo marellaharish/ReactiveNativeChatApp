@@ -1,46 +1,57 @@
 import React, { useEffect, useContext, useState } from "react";
 import { FlatList, StyleSheet, Text, View, RefreshControl } from "react-native";
-import axios from "axios";
+import io from "socket.io-client";
 import { UserType } from "../UserContext";
 import FriendRequest from "../components/FriendRequest";
 
+const socket = io("https://reactnativechatapp.onrender.com");
+
 const FriendsScreen = () => {
-  const { userId, setUserId } = useContext(UserType);
+  const { userId } = useContext(UserType);
   const [friendRequests, setFriendRequests] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
+  const fetchFriendRequests = () => {
+    socket.emit("joinRoom", userId);
+
+    socket.on("friendRequests", (friendRequestsData) => {
+      const formattedRequests = friendRequestsData.map((friendRequest) => ({
+        _id: friendRequest._id,
+        name: friendRequest.name,
+        email: friendRequest.email,
+        image: friendRequest.image,
+      }));
+
+      setFriendRequests(formattedRequests);
+      setRefreshing(false);
+    });
+
+    socket.on("newFriendRequest", (newRequest) => {
+      setFriendRequests((prevRequests) => [
+        ...prevRequests,
+        {
+          _id: newRequest._id,
+          name: newRequest.name,
+          email: newRequest.email,
+          image: newRequest.image,
+        },
+      ]);
+    });
+  };
+
   useEffect(() => {
     fetchFriendRequests();
-  }, []);
 
-  const fetchFriendRequests = async () => {
-    try {
-      const response = await axios.get(
-        `https://reactnativechatapp.onrender.com/friend-request/${userId}`
-      );
-      if (response.status === 200) {
-        const friendRequestsData = response.data.map((friendRequest) => ({
-          _id: friendRequest._id,
-          name: friendRequest.name,
-          email: friendRequest.email,
-          image: friendRequest.image,
-        }));
-
-        setFriendRequests(friendRequestsData);
-      }
-    } catch (err) {
-      console.log("error message", err);
-    } finally {
-      setRefreshing(false);
-    }
-  };
+    return () => {
+      socket.off("friendRequests");
+      socket.off("newFriendRequest");
+    };
+  }, [userId]);
 
   const onRefresh = () => {
     setRefreshing(true);
-    fetchFriendRequests();
+    socket.emit("joinRoom", userId);
   };
-
-  console.log(friendRequests);
 
   return (
     <View style={styles.container}>
@@ -73,7 +84,6 @@ export default FriendsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
 });
-

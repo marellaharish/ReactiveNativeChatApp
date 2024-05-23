@@ -136,15 +136,16 @@ app.get("/users/:userId", (req, res) => {
 
 
 // Endpoint to access the currently logged-in user
-app.get("/current_user", (req, res) => {
-  const loggedInUser = req.user;
-  // Check if user information exists
-  if (!loggedInUser) {
-    return res.status(401).json({ message: "User not authenticated" });
-  }
-
-  // If the user information exists, return it
-  res.status(200).json(loggedInUser);
+app.get("/current_user/:userId", (req, res) => {
+  const loggedInUserId = req.params.userId;
+  User.findOne({ _id: loggedInUserId })
+    .then((users) => {
+      res.status(200).json(users);
+    })
+    .catch((err) => {
+      console.log("Error retrieving users", err);
+      res.status(500).json({ message: "Error retrieving users" });
+    });
 });
 
 

@@ -17,6 +17,8 @@ import ProfileView from "./screens/ProfileView";
 import NewChats from "./screens/NewChats";
 import SettingsScreen from "./screens/SettingsScreen";
 import DropDownSelect from "./components/DropDownSelect";
+import MyFriends from "./screens/MyFriends";
+import GraphReports from "./screens/GraphReports";
 const StackNavigator = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -60,7 +62,7 @@ const StackNavigator = () => {
                 <>
                   {/* <TouchableOpacity style={{ marginRight: 10 }} onPress={handleLogout}><MaterialIcons name="logout" size={24} color="black" /></TouchableOpacity> */}
                   <TouchableOpacity style={{ marginRight: 10 }} ><Feather name="search" size={24} color="black" /></TouchableOpacity>
-                  <TouchableOpacity onPress={handleLogout}><DropDownSelect /></TouchableOpacity>
+                  <TouchableOpacity><DropDownSelect /></TouchableOpacity>
                 </>
               ),
             }} />
@@ -71,6 +73,8 @@ const StackNavigator = () => {
             <Stack.Screen name="Profile" component={ProfileView} />
             <Stack.Screen name="Newchat" component={NewChats} />
             <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+            <Stack.Screen name="MyFriends" component={MyFriends} />
+            <Stack.Screen name="GraphReports" component={GraphReports} />
 
           </>
         ) : (
@@ -89,7 +93,7 @@ const StackNavigator = () => {
               headerShadowVisible: false, headerStyle: { backgroundColor: '#6DB3EC' }, headerTitleStyle: { color: 'white', fontSize: 20, }, headerRight: () => (
                 <>
                   <TouchableOpacity style={{ marginRight: 10 }} onPress={handleLogout}><MaterialIcons name="logout" size={24} color="white" /></TouchableOpacity>
-                  <TouchableOpacity onPress={handleLogout}><DropDownSelect /></TouchableOpacity>
+                  <TouchableOpacity><DropDownSelect /></TouchableOpacity>
                 </>
               ),
             }} />
@@ -99,6 +103,8 @@ const StackNavigator = () => {
             <Stack.Screen name="Profile" component={ProfileView} />
             <Stack.Screen name="Newchat" component={NewChats} />
             <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+            <Stack.Screen name="MyFriends" component={MyFriends} />
+            <Stack.Screen name="GraphReports" component={GraphReports} />
           </>
         )}
       </Stack.Navigator>
