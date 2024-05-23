@@ -198,7 +198,7 @@ const GraphReports = () => {
 
 
 
-                        {/* <Button title="Present Modal" onPress={handlePresentModal} /> */}
+                        <Button title="Present Modal" onPress={handlePresentModal} />
                     </View>
 
 
