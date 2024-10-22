@@ -27,7 +27,7 @@ const RegisterScreen = () => {
 
     // send a POST  request to the backend API to register the user
     axios
-      .post("https://reactnativechatapp.onrender.com/register", user)
+      .post("http://192.168.2.185:8000/register", user)
       .then((response) => {
         console.log(response);
         Alert.alert(

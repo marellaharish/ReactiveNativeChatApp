@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import { UserType } from "../UserContext";
 import FriendRequest from "../components/FriendRequest";
 
-const socket = io("https://reactnativechatapp.onrender.com");
+const socket = io("http://192.168.2.185:8000");
 
 const FriendsScreen = () => {
   const { userId } = useContext(UserType);

@@ -14,9 +14,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode from "jwt-decode";
 
 
-const SettingsScreen = () => {
+const SettingsScreen = ({ navigation, handleLogout }) => {
     const [users, setUsers] = useState({});
-    const navigation = useNavigation();
     let ScreenHeight = Dimensions.get("window").height;
     useEffect(() => {
         fetchUsers();
@@ -28,7 +27,7 @@ const SettingsScreen = () => {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             const response = await axios.get(
-                `https://reactnativechatapp.onrender.com/current_user/${userId}`
+                `http://192.168.2.185:8000/current_user/${userId}`
             );
             setUsers(response.data);
         } catch (error) {
@@ -70,6 +69,8 @@ const SettingsScreen = () => {
     const handleCloseModal = () => {
         setIsEditing(false);
     };
+
+
 
 
     return (
@@ -130,7 +131,7 @@ const SettingsScreen = () => {
                     </View>
                 </View>
             </View>
-            <Pressable style={styles.LogoutButton}>
+            <Pressable style={styles.LogoutButton} onPress={() => handleLogout(navigation)}>
                 <Text style={{ color: "#FFF" }}>Logout</Text>
             </Pressable>
 

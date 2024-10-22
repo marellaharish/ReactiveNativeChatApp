@@ -19,31 +19,26 @@ import SettingsScreen from "./screens/SettingsScreen";
 import DropDownSelect from "./components/DropDownSelect";
 import MyFriends from "./screens/MyFriends";
 import GraphReports from "./screens/GraphReports";
+import Welcome from "./screens/Welcome";
+import PhoneNumberScreen from "./screens/PhoneNumberScreen";
+
 const StackNavigator = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const checkLoginStatus = async () => {
-      try {
-        const token = await AsyncStorage.getItem("authToken");
-
-        if (token) {
-          setIsLoggedIn(true);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } catch (error) {
-        console.log("error", error);
-      }
+      const token = await AsyncStorage.getItem("authToken");
+      setIsLoggedIn(!!token);
     };
 
     checkLoginStatus();
   }, []);
 
-  const handleLogout = async () => {
+  const handleLogout = async (navigation) => {
     try {
       await AsyncStorage.removeItem("authToken");
       setIsLoggedIn(false);
+      navigation.navigate('Login');
     } catch (error) {
       console.log("Error logging out:", error);
     }
@@ -72,13 +67,31 @@ const StackNavigator = () => {
             <Stack.Screen name="Messages" component={ChatMessagesScreen} />
             <Stack.Screen name="Profile" component={ProfileView} />
             <Stack.Screen name="Newchat" component={NewChats} />
-            <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+            <Stack.Screen
+              name="Settings"
+              options={{ title: 'Settings' }}>
+              {(props) => <SettingsScreen {...props} handleLogout={handleLogout} />}
+            </Stack.Screen>
             <Stack.Screen name="MyFriends" component={MyFriends} />
             <Stack.Screen name="GraphReports" component={GraphReports} />
 
           </>
         ) : (
           <>
+            <Stack.Screen
+              name="Welcome"
+              component={Welcome}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PhoneNumberScreen"
+              component={PhoneNumberScreen}
+            />
+
+
+
+
+
             <Stack.Screen
               name="Login"
               component={LoginScreen}

@@ -30,7 +30,7 @@ const MyFriends = () => {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             const response = await axios.get(
-                `https://reactnativechatapp.onrender.com/current_user/${userId}`
+                `http://192.168.2.185:8000/current_user/${userId}`
             );
             setUsers(response.data);
         } catch (error) {
