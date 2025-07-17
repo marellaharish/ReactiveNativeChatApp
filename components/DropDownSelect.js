@@ -24,9 +24,6 @@ const DropDownSelect = () => {
         else if (option === 'My Friends') {
             navigation.navigate('MyFriends');
         }
-        else if (option === 'Graph Reports') {
-            navigation.navigate('GraphReports');
-        }
     };
     return (
         <View>

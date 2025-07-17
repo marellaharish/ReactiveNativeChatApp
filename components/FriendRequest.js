@@ -9,7 +9,7 @@ const FriendRequest = ({ item, friendRequests, setFriendRequests }) => {
   const acceptRequest = async (friendRequestId) => {
     try {
       const response = await fetch(
-        "http://192.168.2.185:8000/friend-request/accept",
+        "http://192.168.2.174:8000/friend-request/accept",
         {
           method: "POST",
           headers: {
@@ -47,7 +47,7 @@ const FriendRequest = ({ item, friendRequests, setFriendRequests }) => {
       />
 
       <Text
-        style={{ fontSize: 15, fontWeight: "bold", marginLeft: 10, flex: 1 }}
+        style={{ fontSize: 15, fontWeight: "400", marginLeft: 10, flex: 1 }}
       >
         {item?.name} sent you a friend request!!
       </Text>

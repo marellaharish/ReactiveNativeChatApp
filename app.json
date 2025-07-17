@@ -23,7 +23,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.harishmarella.chatapp"
     },
     "android": {
       "adaptiveIcon": {

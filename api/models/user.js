@@ -38,6 +38,15 @@ const userSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  chatMetadata: [
+    {
+      participantId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      unreadCount: { type: Number, default: 0 },
+      lastSeen: { type: Date, default: null }
+    }
+  ],
+
+
 });
 
 

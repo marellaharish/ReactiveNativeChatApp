@@ -2,9 +2,9 @@ import { View, Text } from 'react-native'
 import * as React from 'react';
 import { NativeScreenContainer } from 'react-native-screens';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import HomeScreen from './screens/HomeScreen';
-import FriendsScreen from './screens/FriendsScreen';
-import ChatsScreen from './screens/ChatsScreen';
+import HomeScreen from './Screens/HomeScreen';
+import FriendsScreen from './Screens/FriendsScreen';
+import ChatsScreen from './Screens/ChatsScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TopBarNavigation = () => {

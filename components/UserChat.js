@@ -6,7 +6,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-const UserChat = ({ item }) => {
+import { io } from "socket.io-client";
+import { defaultImg } from "../assets";
+const socket = io("http://192.168.2.174:8000"); // use your backend IP
+
+
+
+
+
+const UserChat = ({ item, lastMessage }) => {
   const { userId, setUserId } = useContext(UserType);
   const [messages, setMessages] = useState([]);
   const [notificationCount, setNotificationCount] = useState(0);
@@ -14,7 +22,7 @@ const UserChat = ({ item }) => {
   const fetchMessages = async () => {
     try {
       const response = await fetch(
-        `http://192.168.2.185:8000/messages/${userId}/${item._id}`
+        `http://192.168.2.174:8000/messages/${userId}/${item._id}`
       );
       const data = await response.json();
 
@@ -28,10 +36,40 @@ const UserChat = ({ item }) => {
     }
   };
 
+  const fetchUnreadCount = async () => {
+    try {
+      const response = await fetch(
+        `http://192.168.2.174:8000/unread-count/${item._id}/${userId}`
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        setNotificationCount(data.unreadCount); // Update the unread count in the state
+      } else {
+        console.log("Error fetching unread count");
+      }
+    } catch (error) {
+      console.log("Error fetching unread count", error);
+    }
+  };
+
+
   useEffect(() => {
     fetchMessages();
+    fetchUnreadCount();
+
+    socket.on("newMessage", (data) => {
+      if (data.senderId === item._id && data.recepientId === userId) {
+        setNotificationCount(data.unreadCount);
+      }
+    });
+
+
+    return () => {
+      socket.off("newMessage"); // clean up
+    };
   }, []);
-  console.log(messages);
+
 
   const getLastMessage = () => {
     const userMessages = messages.filter(
@@ -42,39 +80,12 @@ const UserChat = ({ item }) => {
 
     return userMessages[n - 1];
   };
-  const lastMessage = getLastMessage();
-  console.log(lastMessage);
+  // const lastMessage = item.lastMessage || getLastMessage(); 
   const formatTime = (time) => {
     const options = { hour: "numeric", minute: "numeric" };
     return new Date(time).toLocaleString("en-US", options);
   };
   let ScreenHeight = Dimensions.get("window").height;
-
-  const fetchLatestMessagesCount = async () => {
-    try {
-      const response = await fetch(
-        `http://192.168.2.185:8000/messages/count/${userId}/${item._id}`
-      );
-      const data = await response.json();
-
-      if (response.ok) {
-        setNotificationCount(data.count);
-      } else {
-        console.log("Error fetching message count", response.status.message);
-      }
-    } catch (error) {
-      console.log("Error fetching message count", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchLatestMessagesCount();
-  }, []);
-
-  const clearNotificationCount = () => {
-    // Clear the notification count when the chat is opened
-    setNotificationCount(0);
-  };
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -94,12 +105,16 @@ const UserChat = ({ item }) => {
   return (
     <Pressable
       onPress={() => {
+        fetch(`http://192.168.2.174:8000/mark-read/${item._id}/${userId}`, {
+          method: "POST",
+        });
+
         navigation.navigate("Messages", {
           recepientId: item._id,
-          clearNotificationCount, // Pass the function to clear the count
         });
-        clearNotificationCount(); // Also clear the count when pressed
+        setNotificationCount(0);
       }}
+
 
       style={{
         flexDirection: "row",
@@ -123,7 +138,7 @@ const UserChat = ({ item }) => {
               borderRadius: 25,
               resizeMode: 'cover',
             }}
-            source={{ uri: item.image }}
+            source={item.image == null || item.image == "" || !item.image ? defaultImg : { uri: item.image }}
           />
         </TouchableWithoutFeedback>
         <Modal
@@ -141,7 +156,7 @@ const UserChat = ({ item }) => {
                     height: 250,
                     resizeMode: 'cover',
                   }}
-                  source={{ uri: item.image }}
+                  source={item.image === null || item.image == "" || !item.image ? defaultImg : { uri: item.image }}
                 />
                 <Text style={styles.overlayText}>{item?.name}</Text>
                 <View style={styles.BottomDiv}>
@@ -166,12 +181,24 @@ const UserChat = ({ item }) => {
 
       <View style={{ flex: 1 }}>
         <Text style={{ fontSize: 15, fontWeight: "500" }}>{item?.name}</Text>
-        {lastMessage && (
-          <Text style={{ marginTop: 2, color: "gray", fontWeight: "500" }}>
-            <Ionicons name="checkmark-done" size={15} color="#8696a0" />
-            {lastMessage?.message}
-          </Text>
-        )}
+        <View style={{ display: "flex", flexDirection: "row", alignItems: "center", marginTop: 2, }}>
+
+          {lastMessage ? (
+            <>
+              {
+                lastMessage?.senderId?._id === userId && (
+                  <Ionicons name="checkmark-done" size={16} color={lastMessage.isRead ? "#6DB3EC" : "#8696a0"} />
+                )
+              }
+              <Text style={{ color: "gray", fontWeight: "500", paddingLeft: 2 }}>
+                {lastMessage?.message}
+              </Text>
+            </>
+          ) : <>
+
+          </>}
+        </View>
+
       </View>
 
       <View style={{ display: 'flex', alignItems: "flex-end", marginEnd: 15 }}>
@@ -179,7 +206,7 @@ const UserChat = ({ item }) => {
           {lastMessage && formatTime(lastMessage?.timeStamp)}
         </Text>
         {notificationCount > 0 && (
-          <View style={{ width: 18, height: 18, backgroundColor: "#6DB3EC", borderRadius: 50, display: "flex", alignItems: "center", justifyContent: "center", marginTop: 5 }}>
+          <View style={{ width: 25, height: 25, backgroundColor: "#6DB3EC", borderRadius: 50, display: "flex", alignItems: "center", justifyContent: "center", marginTop: 5, }}>
             <Text style={{ color: "#fff", fontWeight: 500 }}>
               {notificationCount}
             </Text>

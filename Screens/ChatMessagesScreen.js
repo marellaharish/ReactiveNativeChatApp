@@ -34,9 +34,10 @@ const ChatMessagesScreen = () => {
   const { recepientId } = route.params;
   const [message, setMessage] = useState("");
   const { userId, setUserId } = useContext(UserType);
+  const [overallUnreadCount, setOverallUnreadCount] = useState(0)
 
   const scrollViewRef = useRef(null);
-  const socket = useRef(io("http://192.168.2.185:8000"));
+  const socket = useRef(io("http://192.168.2.174:8000"));
 
   useEffect(() => {
     scrollToBottom();
@@ -46,7 +47,7 @@ const ChatMessagesScreen = () => {
     const fetchMessages = async () => {
       try {
         const response = await fetch(
-          `http://192.168.2.185:8000/messages/${userId}/${recepientId}`
+          `http://192.168.2.174:8000/messages/${userId}/${recepientId}`
         );
         const data = await response.json();
 
@@ -67,7 +68,7 @@ const ChatMessagesScreen = () => {
     const fetchRecepientData = async () => {
       try {
         const response = await fetch(
-          `http://192.168.2.185:8000/user/${recepientId}`
+          `http://192.168.2.174:8000/user/${recepientId}`
         );
 
         const data = await response.json();
@@ -114,7 +115,7 @@ const ChatMessagesScreen = () => {
   const fetchMessages = async () => {
     try {
       const response = await fetch(
-        `http://192.168.2.185:8000/messages/${userId}/${recepientId}`
+        `http://192.168.2.174:8000/messages/${userId}/${recepientId}`
       );
       const data = await response.json();
 
@@ -151,7 +152,7 @@ const ChatMessagesScreen = () => {
       }
 
       const response = await fetch(
-        "http://192.168.2.185:8000/messages",
+        "http://192.168.2.174:8000/messages",
         {
           method: "POST",
           body: formData,
@@ -175,6 +176,27 @@ const ChatMessagesScreen = () => {
     }
   };
 
+  const fetchOverallUnreadCount = async () => {
+    try {
+      const response = await fetch(`http://192.168.2.174:8000/overall-unread-count/${userId}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Unread Count: ", data.unreadCount);
+        setOverallUnreadCount(data.unreadCount);
+      } else {
+        console.log("Error fetching overall unread count");
+      }
+    } catch (error) {
+      console.log("Error fetching overall unread count", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchOverallUnreadCount();
+  }, [navigation]);
+
+  console.log(overallUnreadCount, "overallUnreadCount")
 
   console.log("messages", selectedMessages);
   useLayoutEffect(() => {
@@ -185,12 +207,16 @@ const ChatMessagesScreen = () => {
       },
       headerLeft: () => (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-          <Ionicons
+          <MaterialIcons name="arrow-back-ios"
             onPress={() => navigation.goBack()}
-            name="arrow-back"
             size={24}
             color="black"
           />
+          {overallUnreadCount > 0 &&
+            <Text styl={{ paddingRight: 10 }}>
+              {overallUnreadCount}
+            </Text>
+          }
 
           {selectedMessages.length > 0 ? (
             <View>
@@ -239,15 +265,14 @@ const ChatMessagesScreen = () => {
         ) : (<View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
           <FontAwesome name="video-camera" size={18} color="#000" />
           <Ionicons name="call" size={18} color="#000" />
-          <Entypo name="dots-three-vertical" size={18} color="#000" />
         </View>),
     });
   }, [recepientData, selectedMessages]);
 
   const deleteMessages = async (messageIds) => {
     try {
-      // const response = await fetch("http://192.168.2.185:8000/deleteMessages", {
-      const response = await fetch("http://192.168.2.185:8000/deleteMessages", {
+      // const response = await fetch("http://192.168.2.174:8000/deleteMessages", {
+      const response = await fetch("http://192.168.2.174:8000/deleteMessages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -367,12 +392,12 @@ const ChatMessagesScreen = () => {
                           alignSelf: "flex-end",
                           backgroundColor: "#d9fdd3",
                           padding: 4,
-                          maxWidth: "60%",
+                          maxWidth: "70%",
                           minWidth: 80,
-                          borderRadius: 7,
+                          borderRadius: 9,
                           margin: 5,
                           paddingLeft: 10,
-                          paddingRight: 45,
+                          paddingRight: 50,
                           paddingTop: 8,
                           paddingBottom: 8
                         }

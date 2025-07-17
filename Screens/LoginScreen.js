@@ -20,7 +20,6 @@ const LoginScreen = () => {
       try {
         const token = await AsyncStorage.getItem("authToken");
         const userInfo = await AsyncStorage.getItem("loginUserInfo");
-        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
         console.log(userInfo);
         if (token) {
           navigation.replace("ShiftChat");
@@ -42,7 +41,7 @@ const LoginScreen = () => {
     };
 
     axios
-      .post("http://192.168.2.185:8000/login", user)
+      .post("http://192.168.2.174:8000/login", user)
       .then((response) => {
         console.log(response + "################################################################");
         const token = response.data.token;

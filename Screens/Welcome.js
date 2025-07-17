@@ -32,7 +32,7 @@ const Welcome = () => {
                 to accept the
                 <Text style={styles.link}> Terms of Service</Text>
             </Text>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate("PhoneNumberScreen")}>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate("Login")}>
                 <Text style={[styles.welcomeText3]}>
                     Agree & Continue
                 </Text>
@@ -67,18 +67,18 @@ const styles = StyleSheet.create({
     welcomeText2: {
         paddingHorizontal: 40,
         textAlign: "center",
-        fontSize: FontSizes.normal,
+        fontSize: 18,
         lineHeight: 30,
     },
     welcomeText3: {
         color: "#107ae8",
-        fontSize: 26,
+        fontSize: 22,
         fontWeight: 500,
         textAlign: "center",
         paddingTop: Padding.p_2xxl,
     },
     link: {
         color: "#107ae8",
-        fontSize: FontSizes.normal,
+        fontSize: 18,
     },
 });

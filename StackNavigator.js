@@ -2,25 +2,25 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginScreen from "./screens/LoginScreen";
-import RegisterScreen from "./screens/RegisterScreen";
-import HomeScreen from "./screens/HomeScreen";
-import FriendsScreen from "./screens/FriendsScreen";
-import ChatsScreen from "./screens/ChatsScreen";
-import ChatMessagesScreen from "./screens/ChatMessagesScreen";
+import LoginScreen from "./Screens/LoginScreen";
+import RegisterScreen from "./Screens/RegisterScreen";
+import HomeScreen from "./Screens/HomeScreen";
+import FriendsScreen from "./Screens/FriendsScreen";
+import ChatsScreen from "./Screens/ChatsScreen";
+import ChatMessagesScreen from "./Screens/ChatMessagesScreen";
 import TopBarNavigation from "./TopBarNavigation";
 import BottomBarNavigation from "./BottomBarNavigation";
 import { MaterialIcons } from '@expo/vector-icons'
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ProfileView from "./screens/ProfileView";
-import NewChats from "./screens/NewChats";
-import SettingsScreen from "./screens/SettingsScreen";
+import ProfileView from "./Screens/ProfileView";
+import NewChats from "./Screens/NewChats";
+import SettingsScreen from "./Screens/SettingsScreen";
 import DropDownSelect from "./components/DropDownSelect";
-import MyFriends from "./screens/MyFriends";
-import GraphReports from "./screens/GraphReports";
-import Welcome from "./screens/Welcome";
-import PhoneNumberScreen from "./screens/PhoneNumberScreen";
+import MyFriends from "./Screens/MyFriends";
+import Welcome from "./Screens/Welcome";
+import PhoneNumberScreen from "./Screens/PhoneNumberScreen";
+import TypeStatus from "./Screens/TypeStatus";
 
 const StackNavigator = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -52,18 +52,12 @@ const StackNavigator = () => {
         {isLoggedIn ? (
           <>
 
-            <Stack.Screen name="ShiftChat" component={BottomBarNavigation} options={{
-              headerShadowVisible: false, headerStyle: { backgroundColor: '#fff' }, headerTitleStyle: { color: '#6DB3EC', fontSize: 22, fontWeight: "600" }, headerRight: () => (
-                <>
-                  {/* <TouchableOpacity style={{ marginRight: 10 }} onPress={handleLogout}><MaterialIcons name="logout" size={24} color="black" /></TouchableOpacity> */}
-                  <TouchableOpacity style={{ marginRight: 10 }} ><Feather name="search" size={24} color="black" /></TouchableOpacity>
-                  <TouchableOpacity><DropDownSelect /></TouchableOpacity>
-                </>
-              ),
-            }} />
+            <Stack.Screen name="ShiftChat" component={BottomBarNavigation} options={{ headerShown: false }} />
 
             <Stack.Screen name="Friends" component={FriendsScreen} />
-            <Stack.Screen name="Chats" component={ChatsScreen} />
+
+
+
             <Stack.Screen name="Messages" component={ChatMessagesScreen} />
             <Stack.Screen name="Profile" component={ProfileView} />
             <Stack.Screen name="Newchat" component={NewChats} />
@@ -73,12 +67,12 @@ const StackNavigator = () => {
               {(props) => <SettingsScreen {...props} handleLogout={handleLogout} />}
             </Stack.Screen>
             <Stack.Screen name="MyFriends" component={MyFriends} />
-            <Stack.Screen name="GraphReports" component={GraphReports} />
+            <Stack.Screen name="TypeStatus" component={TypeStatus} options={{ headerShown: false }} />
 
           </>
         ) : (
           <>
-            <Stack.Screen
+            {/* <Stack.Screen
               name="Welcome"
               component={Welcome}
               options={{ headerShown: false }}
@@ -87,7 +81,7 @@ const StackNavigator = () => {
               name="PhoneNumberScreen"
               component={PhoneNumberScreen}
             />
-
+ */}
 
 
 
@@ -111,13 +105,13 @@ const StackNavigator = () => {
               ),
             }} />
             <Stack.Screen name="Friends" component={FriendsScreen} />
-            <Stack.Screen name="Chats" component={ChatsScreen} />
             <Stack.Screen name="Messages" component={ChatMessagesScreen} />
             <Stack.Screen name="Profile" component={ProfileView} />
             <Stack.Screen name="Newchat" component={NewChats} />
             <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
             <Stack.Screen name="MyFriends" component={MyFriends} />
-            <Stack.Screen name="GraphReports" component={GraphReports} />
+            <Stack.Screen name="TypeStatus" component={TypeStatus} options={{ headerShown: false }} />
+
           </>
         )}
       </Stack.Navigator>

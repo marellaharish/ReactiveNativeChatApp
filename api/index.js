@@ -6,14 +6,16 @@ const LocalStrategy = require("passport-local").Strategy;
 const { Server } = require("socket.io"); // Import Socket.io
 
 const app = express();
+app.use(express.json({ limit: '10mb' }));
 const port = 8000;
 const cors = require("cors");
 app.use(cors());
 
+app.use(bodyParser.json({ limit: '50mb' }));  // Adjust the limit as necessar 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 app.use(passport.initialize());
 const jwt = require("jsonwebtoken");
+
 
 mongoose
   .connect("mongodb+srv://marellaharish:harish@cluster0.sxjzeah.mongodb.net/", {
@@ -306,6 +308,64 @@ app.get("/messages/:senderId/:recepientId", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
+// Make sure this is before any catch-all or wildcard routes
+app.get("/unread-count/:senderId/:recepientId", async (req, res) => {
+  try {
+    const { senderId, recepientId } = req.params;
+
+    const unreadCount = await Message.countDocuments({
+      senderId: senderId,
+      recepientId: recepientId,
+      isRead: false,
+    });
+
+    res.json({ unreadCount });
+    console.log(unreadCount, "unreadCount");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+app.post("/mark-read/:senderId/:recepientId", async (req, res) => {
+  try {
+    const { senderId, recepientId } = req.params;
+
+    await Message.updateMany(
+      { senderId, recepientId, isRead: false },
+      { $set: { isRead: true } }
+    );
+
+    res.json({ success: true });
+    console.log("msgs are Read Sucessfully...")
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+// Endpoint to get overall unread count for the logged-in user
+app.get("/overall-unread-count/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const unreadCount = await Message.countDocuments({
+      recepientId: userId,
+      isRead: false,
+    });
+
+    res.json({ unreadCount });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 
 //endpoint to delete the messages!
 app.post("/deleteMessages", async (req, res) => {

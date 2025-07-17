@@ -19,6 +19,8 @@ const messageSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  isRead: { type: Boolean, default: false },
+  seenBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }]
 });
 
 const Message = mongoose.model('Message', messageSchema);
